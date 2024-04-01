@@ -3,17 +3,23 @@
 
  Link para ínicio dos estudos: [python 101](https://python101.pythonlibrary.org/)
 
-Guia: Criar um resumo para cada capitulo e testar os comandos do tutorial diretamente no terminal do vscode (comando `python3` para iniciar). -> Para acessar usamos CTRL+SHIFT+P e buscamos Create New Terminal
+Guia: Criar um resumo para cada capítulo e testar os comandos do tutorial diretamente no terminal do vscode (comando `python3` para iniciar). -> Para acessar, usamos CTRL+SHIFT+P e buscamos Create New Terminal
 
-### 1) Capitulo 1: Programação IDLE 
-- Usando IDLE: Python por ser uma linguagem interpretativa utiliza de elementos próprios e não utiliza outros como compiladores. No caso, um que é utilizado é o chamado **IDLE** que funciona como um editor de código, destacando, depurando e até mesmo preenchendo automaticamente algumas areas do código
+### 1) Capítulo 1: Programação IDLE 
+- __Usando IDLE__
 
-- Sobre comentários: Comentários são de extrema importância para caso alguém queira fazer algum comentario em alguma linha de código, tanto para relembrar algo ou para fazer alguma observação.
+ Python, por ser uma linguagem interpretativa, utiliza de elementos próprios e não utiliza outros como compiladores. No caso, um que é utilizado é o chamado **IDLE**, que funciona como um editor de código, destacando, depurando e até mesmo preenchendo automaticamente algumas áreas do código.
+
+- __Sobre comentários__
+
+Comentários são de extrema importância para caso alguém queira fazer algum comentário em alguma linha de código, tanto para relembrar algo ou para fazer alguma observação.
 
 
-### 2) Capitulo 2: Tudo sobre strings
+### 2) Capítulo 2: Tudo sobre strings
 
-- Como criar uma string: De inicio podemos fazer strings usando aspas duplas simples e triplas, sendo que as aspas triplas (''') nos proporcionam a opção de continuar a string em outra linha do comando. Outra forma também, é utilizando o comando str (informação) no qual podemos guardar as informações ja registradas em outro lugar em uma string, esse método é conhecido como **fundição** *(1)*. Strings são imutáveis, ou seja, mesmo se atribuirmos uma definição diferente mas para um mesmo nome de string sua **identidade** muda, não sendo mais o mesmo ID daquela string anterior na qual definimos *(2)*.
+- __Como criar uma string__
+
+ De início podemos fazer strings usando aspas duplas simples e triplas, sendo que as aspas triplas (''') nos proporcionam a opção de continuar a string em outra linha do comando. Outra forma também é utilizando o comando str (informação) no qual podemos guardar as informações já registradas em outro lugar em uma string, esse método é conhecido como **fundição** *(1)*. Strings são imutáveis, ou seja, mesmo se atribuirmos uma definição diferente, mas para um mesmo nome de string, sua **identidade** muda, não sendo mais o mesmo ID daquela string anterior na qual definimos *(2)*.
 
 _(1)_
 ```
@@ -32,14 +38,18 @@ _(2)_
 >>> id ( minha_string ) 
 31345312
 ```
-- Concatenar (ou somar) strings: Em python para somar strings, ou seja, ajuntar uma na outra, apenas é necessário definir cada uma que queiramos somar, e uma que utilizaremos para guardar, e depois utilizar o operador **soma (+)**.
+- __Concatenar (ou somar) strings__
+
+ Em python para somar strings, ou seja, ajuntar uma na outra, apenas é necessário definir cada uma que queiramos somar, e uma que utilizaremos para guardar, e depois utilizar o operador **soma (+)**.
 
 ```
 >>> string_one  =  "Meu cachorro comeu" 
 >>> string_two  =  " meu dever de casa!" 
 >>> string_três  =  string_um  +  string_dois
 ```
-- Métodos string: Por uma string ser um objeto me python, podemos modificar uma string utilizando comandos simples como **upper() lower() strip()** e etc. Estes comandos modificam nossa string e o conteúdo dela, e para saber todos os comandos possíveis utilizamos um comando específico _(3)_. Os métodos que começam e terminam com "__" não são muito utilizados, mas caso queiramos saber para o que cada um serve 
+- __Métodos string__
+
+ Por uma string ser um objeto me python, podemos modificar uma string utilizando comandos simples como **upper() lower() strip()** e etc. Estes comandos modificam nossa string e o conteúdo dela, e para saber todos os comandos possíveis utilizamos um comando específico _(3)_. Os métodos que começam e terminam com "__" não são muito utilizados, mas caso queiramos saber para o que cada um serve 
 basta utilizar outro comando _(4)_.
 
 _(3)_
@@ -50,7 +60,9 @@ _(4)_
  ```
  >>> help(my_string.capitalize)
 ```
-- Fatiamento de strings: Fatiamento de string é um método utilizado para mostrar apenas algumas **partes específicas** da string na qual queremos **visualizar**, em visualização fica mais fácil de entender como demonstrado no bloco de código _(5)_. No caso, podemos fatiar especificando o ínicio, o final, ou ambos. Isso vai depender do que queremos que saia no final. Também podemos acessar caracteres individuais de uma string utilizando `printf(minha_string[n])`, sendo n o número do caractere.
+- __Fatiamento de strings__
+
+ Fatiamento de string é um método utilizado para mostrar apenas algumas **partes específicas** da string na qual queremos **visualizar**, em visualização fica mais fácil de entender como demonstrado no bloco de código _(5)_. No caso, podemos fatiar especificando o ínicio, o final, ou ambos. Isso vai depender do que queremos que saia no final. Também podemos acessar caracteres individuais de uma string utilizando `printf(minha_string[n])`, sendo n o número do caractere.
 
 _(5)_
 ```
@@ -70,7 +82,9 @@ _(5)_
 >>> my_string[2:]
 'like Python!'
 ```
-- Formatação de string: Também conhecida como substiuição, a formatação serve para substituir os valores de uma string base. Na maioria das vezes, você inserirá strings dentro de strings, no entanto, você também inserirá números inteiros e flutuantes em strings com bastante frequência. Aqui temos um exemplo usual de como isso ocorre na prática _(6)_, aqui basicamente mudamos nosso %s para %(lang)s, que é basicamente o %s com uma variável dentro dele. Outro exemplo de substituição é utilizando **format**, no qual aparenta ser mais completo como a seguir _(7)_. Este último exemplo usa um dicionário como usamos no modelo anterior (que são as definições de x e y). No entanto, temos que extrair o dicionário usando o asterisco duplo para que funcione corretamente aqui.
+- __Formatação de string__
+
+ Também conhecida como substiuição, a formatação serve para substituir os valores de uma string base. Na maioria das vezes, você inserirá strings dentro de strings, no entanto, você também inserirá números inteiros e flutuantes em strings com bastante frequência. Aqui temos um exemplo usual de como isso ocorre na prática _(6)_, aqui basicamente mudamos nosso %s para %(lang)s, que é basicamente o %s com uma variável dentro dele. Outro exemplo de substituição é utilizando **format**, no qual aparenta ser mais completo como a seguir _(7)_. Este último exemplo usa um dicionário como usamos no modelo anterior (que são as definições de x e y). No entanto, temos que extrair o dicionário usando o asterisco duplo para que funcione corretamente aqui.
 
 _(6)_
 ```
@@ -92,6 +106,130 @@ Faça um gráfico de um ponto onde x=0 e y=10
 Há muitas outras coisas que você pode fazer com strings, como especificar uma largura, alinhar o texto, converter para bases diferentes e muito mais. Certifique-se de dar uma olhada em algumas das referências no fim do capítulo desta aula.
 
 
+### 3) Capítulo 3: Listas, Tuplas e Dicionários
 
+- __Listas__
+
+ Uma lista é semelhante a um "array" e pode ser criada de duas maneiras:
+
+```
+>>> minha_lista  =  [] 
+>>> minha_lista  =  list ()
+```
+Uma lista contém elementos como strings, inteiros e objetos, podendo conter todos misturados inclusive. O que podemos fazer também, é criar listas de listas:
+
+```
+>>> minha_lista_nested  =  [ minha_lista ,  minha_lista2 ] 
+>>> minha_lista_nested 
+[[1, 2, 3], ['a', 'b', 'c']]
+```
+
+Podemos também usar diferentes métodos para combinar duas listas como o método __extend__ ou apenas utilizando o operador __+__:
+
+```
+>>> minha_lista  =  [ 1 ,  2 ,  3 ] 
+>>> minha_lista2  =  [ "a" ,  "b" ,  "c" ] 
+>>> combo_list  =  minha_lista  +  minha_lista2 
+>>> combo_list 
+[1, 2, 3, ' a', 'b', 'c']
+```
+
+Outra coisa que podemos fazer é classificar uma lista usando o comando __lista.sort()__, porém, se tentarmos atribuir uma lista classificada a outra variável qualquer teremos como resultado __None__ (ou NULL), ou seja, não podemos atribuir ela a uma variável diferente.
+
+Além disso, também podemos "fatiar" uma lista com os mesmos comandos que usamos nas strings.
+
+- __Tuplas__
+
+Tuplas são semelhante a listas, mas são criadas com parenteses ao invés de colchetes. A diferença é que uma tupla é __imutável__, como podemos ver no exemplo a seguir:
+
+```
+>>> my_tuple = (1, 2, 3, 4, 5)
+>>> my_tuple[0:1]
+(1, 2, 3)
+>>> another_tuple = tuple()
+>>> abc = tuple([1, 2, 3])
+```
+O código acima demonstra uma maneira de criar uma tupla com cinco elementos. Também mostra que podemos fatiar tuplas. No entanto, não podemos classificar uma. Os dois últimos exemplos mostram como criar tuplas usando a palavra-chave tuple, o primeiro apenas cria uma tupla vazia, enquanto o segundo exemplo possui três elementos dentro dela. 
+
+O ultimo exemplo (abc) é também um exemplo de __fundição__, no qual podemos alterar ou converter um item de um tipo de dado para outro (nesse caso de uma lista para uma tupla), e para reverter isso, basta utilizar o comando reverso `abc = lista(abc)`.
+
+- __Dicionários__
+
+Um dicionário é basicamente uma __tabela hash__, podem ser chamados também de memorias associativas ou matrizes associativas. Os dicionarios são indexados com __chaves__ que podem ser de qualquer tipo imutável (uma string, um número, etc). Podemos obter uma lista de chaves utilizando o método __keys__. Para verificar se um dicionário tem uma chave, podemos usar a palavra-chave __in__. Um exemplo de criação de dicionário: 
+
+```
+>>> my_dict = {}
+>>> another_dict = dict()
+>>> my_other_dict = {"one":1, "two":2, "three":3}
+>>> my_other_dict
+{'three': 3, 'two': 2, 'one': 1}
+```
+Os dois primeiros exemplos mostram como criar um dicionário vazio, já o último contém elementos (chaves e suas correspondentes) dentro. Para acessar um valor em um dicionário basta usar `my_other_dict ["chave"]`. Para verificar se existe uma chave no dicionário, utilizamos o "in" comentado anteriormente dessa forma: `"chave" in my_other_dict`. Para acessar uma lista de todas as chaves presentes em um dicionário usamos `my_other_dict.keys()`.
+
+Embora isso provavelmente não importe muito agora, em uma situação real de trabalho, os segundos importam. Quando temos milhares de arquivos para processar, esses pequenos truques podem economizar muito tempo a longo prazo.
+
+
+### 4) Capítulo 4: Declarações condicionais
+
+- __Instrução IF__
+
+ A instrução if no python é simples,porém, devemos tomar cuidado com os __espaços__ e executar o if primeiro e depois a mensagem. Usando como exemplo as variáveis temos: 
+
+```
+if var1 > var2 :
+    print("Verdadeiro")
+else :
+    print("Falso")
+```
+- __Operações Booleanas__
+
+ Analoga a outras linguagens de programação, as operações booleanas utilizam das operações __or__, __and__ e __not__, vejamos um exemplo de utilização:
+
+```
+x  =  10 
+y  =  10 
+if  x  ==  10  e  y  ==  15 : 
+    print ( "Esta afirmação era verdadeira" ) 
+else : 
+    print ( "A afirmação era falsa!" )
+```
+Podemos também usar os operadores booleanos para verificar elementos de listas:
+
+```
+my_list = [1, 2, 3, 4]
+x = 10
+if x not in my_list:
+    print("'x' não foi adicionado a lista")
+```
+
+- __Verificando se não há nada__
+
+ Em python uma string, tupla ou lista vazia também é avaliada como __False__, assim como a __None__. O valor None é usado para representar a ausência do valor. Vejamos um exemplo:
+
+```
+empty_list = []
+empty_tuple = ()
+empty_string = ""
+nothing = None
+
+if empty_list == []:
+    print("It's an empty list!")
+
+if empty_tuple:
+    print("It's not an empty tuple!")
+
+if not empty_string:
+    print("This is an empty string!")
+
+if not nothing:
+    print("Then it's nothing!")
+```
+As primeiras quatro linhas configuram quatro variáveis. A seguir, temos quatro condicionais para testá-las. O primeiro verifica se a lista_vazia está realmente vazia. A segunda condicional verifica se o empty_tuple contém algo. As duas últimas condicionais estão fazendo o oposto da segunda, a terceira verifica se a string está vazia e a quarta verifica se a variável nothing é realmente nula.
+
+O operador not significa que estamos verificando o significado oposto. Em outras palavras, estamos verificando se o valor NÃO é Verdadeiro.
+
+- __Caracteres especiais__
+
+Em python temos também caracteres especiais como __\n__ que pula linhas em um print e também __\t__ que da um "tab" em um print.
 
 

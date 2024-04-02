@@ -5,6 +5,8 @@
 
 Guia: Criar um resumo para cada capítulo e testar os comandos do tutorial diretamente no terminal do vscode (comando `python3` para iniciar). -> Para acessar, usamos CTRL+SHIFT+P e buscamos Create New Terminal
 
+Notas: Se quisermos verificar algum teste no compilador, igual fazemos nas linhas de comando, usamos print("comando") caso este comando apareça alguma mensagem feita pelo python.
+
 ### 1) Capítulo 1: Programação IDLE 
 - __Usando IDLE__
 
@@ -188,7 +190,7 @@ else :
 ```
 x  =  10 
 y  =  10 
-if  x  ==  10  e  y  ==  15 : 
+if  x  ==  10  and  y  ==  15 : 
     print ( "Esta afirmação era verdadeira" ) 
 else : 
     print ( "A afirmação era falsa!" )

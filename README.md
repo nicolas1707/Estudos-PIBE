@@ -235,3 +235,131 @@ O operador not significa que estamos verificando o significado oposto. Em outras
 Em python temos também caracteres especiais como __\n__ que pula linhas em um print e também __\t__ que da um "tab" em um print.
 
 
+### Capítulo 5 - Loops
+
+- __Loop For__
+
+Usamos o loop em Python todas vez que desejamos iterar algo repetidas vezes, e essas repetições são dadas por "n" vezes. Usaremos a função __range__ para entendermos como funciona, neste formato: `range(n)`. Esta função pega um número inteiro (n) e retorna um "range object". A função range também aceita um valor __inicial__, __final__ e um valor de __etapa__, nesta ordem. Aqui vai um exemplo:
+
+```
+>>> range(5,10)
+range(5, 10)
+>>> list(range(1, 10, 2))
+[1, 3, 5, 7, 9]
+```
+Entendendo a função range, podemos finalmente criar um laço de repetição usando o __for__ em qualquer __programa__ usando python, aqui vai um exemplo:
+
+```
+for number in range(5):
+print(number)
+```
+Saída do código acima:
+```
+0
+1
+2
+3
+4
+```
+Podemos perceber que `range(5)`=`[0, 1, 2, 3, 4]`. Podemos também usar um loop for com um dicionário, no qual ele percorre sobre as chaves dentro daquele dicionário:
+```
+a_dict = {"one":1, "two":2, "three":3}
+for key in a_dict:
+    print(key)
+```
+Saída do código acima:
+```
+three
+two
+one
+```
+Agora, sabemos que as chaves podem ser classificadas, podemos fazer isso também antes de iterá-las. Podemos ver como funciona no código abaixo:
+```
+>>> a_dict = {1:"one", 2:"two", 3:"three"}
+>>> keys = a_dict.keys()
+>>> keys = sorted(keys)
+>>> for key in keys:
+       print(key)
+```
+Saída do código acima:
+```
+1
+2
+3
+```
+Primeiro, criamos um dicionário que possui números inteiros para chaves. Em seguida, extraímos as chaves do dicionário (sempre que usarmos __keys()__, isso retornará uma lista não ordenada de chaves). Com isso, temos uma visão das chaves do dicionário, classificamos e então usamos o loop para percorrê-las.
+
+Para avançarmos um pouco mais no conceito de loops, usaremos agora um algoritmo que implementa um loop que imprime apenas números pares. Para isso, também implementaremos uma condicional:
+```
+>>> for number in range(10):
+        if number % 2 == 0:
+            print(number)
+```
+Saída do código acima:
+```
+0
+2
+4
+6
+8
+```
+Utilizando o operador de módulo __%__ juntamente com a estrutura de condição, pudemos identificar todos os números pares presentes dentro do range (10), caso quisermos aumentar a quantidade de números pares, basta aumentar o range.
+
+- __Loop While__
+
+O loop while no Python é semelhante ao da linguagem C, repetindo o que estiver no loop 'n' vezes, dependendo de uma condição estabelecida:
+
+```
+>>> i = 0
+>>> while i < 10:
+        print(i)
+        i = i + 1
+```
+Existe uma forma de sair de um loop sem que a condição seja completada, que é usando o comando `break`. No exemplo abaixo, conseguimos ver isso na prática analisando o código e sua saída:
+```
+>>> while i < 10:
+        print(i)
+        if i == 5:
+            break
+        i += 1
+```
+Saída do código acima:
+```
+0
+1
+2
+3
+4
+5
+```
+O atalho `+=` é muito útil nesses tipos de programas, e também podemos usar com qualquer outro operador matemático além da adição.
+
+O break embutido é conhecido como uma ferramenta de controle de fluxo. Existe outro chamado `continue` que é usado basicamente para __pular uma iteração__ ou continuar com a próxima iteração. Esta é uma maneira de usá-lo:
+```
+i = 0
+
+while i < 10:
+    if i == 3:
+        i += 1
+        continue
+
+    print(i)
+
+    if i == 5:
+        break
+    i += 1
+```
+- __Else em Loops__
+
+A instrução else em loops só será executada se o loop for __concluído com sucesso__. O principal uso da instrução else é para __pesquisar itens__, como no código a seguir:
+```
+my_list = [1, 2, 3, 4, 5]
+
+for i in my_list:
+    if i == 3:
+        print("Item found!")
+        break
+    print(i)
+else:
+    print("Item not found!")
+```

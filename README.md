@@ -235,7 +235,7 @@ O operador not significa que estamos verificando o significado oposto. Em outras
 Em python temos também caracteres especiais como __\n__ que pula linhas em um print e também __\t__ que da um "tab" em um print.
 
 
-### Capítulo 5 - Loops
+### 5) Capítulo 5 - Loops
 
 - __Loop For__
 

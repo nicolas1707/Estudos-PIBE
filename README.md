@@ -363,3 +363,72 @@ for i in my_list:
 else:
     print("Item not found!")
 ```
+
+
+### 6) Capítulo 6: Compreensões do Python
+
+A linguagem Python possui alguns métodos para criar listas e dicionários conhecidos como compreensões. Existe também um terceiro tipo de compreensão para a criação de um conjunto Python. Neste capítulo aprenderemos como usar cada tipo de compreensão. 
+
+- __Compreensões de lista__
+
+A compreensão de lista é basicamente um loop for que produz uma estrutura de __lista__. Podemos visualizar isso melhor com um exemplo simples: `>>> x = [i for i in range(5)]`. Com isso se dermos um `print(x)` isso nos resultará uma lista contendo os inteiros de 0 até 4, isso pode ser útil quando queremos criar uma lista muito rapidamente. Seguimos para outro exemplo onde precisamos analisar um arquivo e procurar algo em particular, podemos usar uma comprrensão de lista como uma espécie de filtro.
+
+Uma outra utilização importante das compreensões de lista é a capacidade de __converter elementos mutaveis__:
+```
+>>> x = ['1', '2', '3', '4', '5']
+>>> y = [int(i) for i in x]
+>>> y
+```
+Saída do código acima:
+```
+[1, 2, 3, 4, 5]
+```
+
+Também há ocasiões em que é necessário criar uma compreensão de lista aninhada. Uma razão para fazer isso é nivelar várias listas em uma. Este exemplo vem da documentação do Python:
+```
+>>> vec = [[1,2,3], [4,5,6], [7,8,9]]
+>>> [num for elem in vec for num in elem]
+```
+Saída do código acima:
+```
+[1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+
+- __Compreensões de dicionário__
+
+São muito semelhantes a uma compreensão de lista na forma como são organizados, vejamos o exemplo a seguir:
+```
+>>> print( {i: str(i) for i in range(5)} )
+```
+Saída do código acima:
+```
+{0: '0', 1: '1', 2: '2', 3: '3', 4: '4'}
+```
+Esse código cria um dicionário onde a chave __i__ é mapeada para o valor __str(i)__ para cada valor i em __range(5)__, range(5) gera uma sequência de números de 0 a 4. Em Python, __str(i)__ é uma função que __converte o valor de i__ para uma __string__. Em outras palavras, str(i) transforma um número inteiro i em uma representação de string desse número, por exemplo, __se i for 5__ então __str(i) será '5'__.
+
+Agora podemos nos perguntar como poderíamos usar a compreensão de um dicionário na vida real. Uma das respostas é a possibilidade de efetuar __trocas__ de chaves e valores do dicionário. Vejamos como isso funciona:
+```
+>>> my_dict = {1:"dog", 2:"cat", 3:"hamster"}
+>>> print( {value:key for key, value in my_dict.items()} )
+```
+Saída do código acima:
+```
+{'hamster': 3, 'dog': 1, 'cat': 2}
+```
+Isso só funcionará se os valores do dicionário forem de um tipo não mutável, como uma string. Caso contrário, você acabará fazendo com que uma exceção seja levantada.
+- __Compreensões de Set__
+
+As compreensões de "set" são criadas da mesma maneira que as de um dicionário. Vamos ver um exemplo usando __set__:
+```
+>>> my_list = [1, 2, 2, 3, 4, 5, 5, 7, 8]
+>>> my_set = set(my_list)
+>>> my_set
+```
+Saída do código acima:
+```
+set{1, 2, 3, 4, 5, 7, 8}
+```
+
+
+
+

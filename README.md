@@ -24,12 +24,12 @@ Comentários são de extrema importância para caso alguém queira fazer algum c
  De início podemos fazer strings usando aspas duplas simples e triplas, sendo que as aspas triplas (''') nos proporcionam a opção de continuar a string em outra linha do comando. Outra forma também é utilizando o comando str (informação) no qual podemos guardar as informações já registradas em outro lugar em uma string, esse método é conhecido como **fundição** *(1)*. Strings são imutáveis, ou seja, mesmo se atribuirmos uma definição diferente, mas para um mesmo nome de string, sua **identidade** muda, não sendo mais o mesmo ID daquela string anterior na qual definimos *(2)*.
 
 _(1)_
-```
+```py
 >>> meu_número  =  123 
 >>> minha_string  =  str ( meu_número )
 ```
 _(2)_
-```
+```py
 >>> minha_string  =  "abc" 
 >>> id ( minha_string ) 
 19397208 
@@ -44,7 +44,7 @@ _(2)_
 
  Em python para somar strings, ou seja, ajuntar uma na outra, apenas é necessário definir cada uma que queiramos somar, e uma que utilizaremos para guardar, e depois utilizar o operador **soma (+)**.
 
-```
+```py
 >>> string_one  =  "Meu cachorro comeu" 
 >>> string_two  =  " meu dever de casa!" 
 >>> string_três  =  string_um  +  string_dois
@@ -55,11 +55,11 @@ _(2)_
 basta utilizar outro comando _(4)_.
 
 _(3)_
-```
+```py
  >>> dir(my_string)
  ```
 _(4)_
- ```
+ ```py
  >>> help(my_string.capitalize)
 ```
 - __Fatiamento de strings__
@@ -67,7 +67,7 @@ _(4)_
  Fatiamento de string é um método utilizado para mostrar apenas algumas **partes específicas** da string na qual queremos **visualizar**, em visualização fica mais fácil de entender como demonstrado no bloco de código _(5)_. No caso, podemos fatiar especificando o ínicio, o final, ou ambos. Isso vai depender do que queremos que saia no final. Também podemos acessar caracteres individuais de uma string utilizando `printf(minha_string[n])`, sendo n o número do caractere.
 
 _(5)_
-```
+```py
 >>> my_string = 'I like Python!'
 >>> my_string[:1]
 'I'
@@ -89,13 +89,13 @@ _(5)_
  Também conhecida como substiuição, a formatação serve para substituir os valores de uma string base. Na maioria das vezes, você inserirá strings dentro de strings, no entanto, você também inserirá números inteiros e flutuantes em strings com bastante frequência. Aqui temos um exemplo usual de como isso ocorre na prática _(6)_, aqui basicamente mudamos nosso %s para %(lang)s, que é basicamente o %s com uma variável dentro dele. Outro exemplo de substituição é utilizando **format**, no qual aparenta ser mais completo como a seguir _(7)_. Este último exemplo usa um dicionário como usamos no modelo anterior (que são as definições de x e y). No entanto, temos que extrair o dicionário usando o asterisco duplo para que funcione corretamente aqui.
 
 _(6)_
-```
+```py
 >>> print ( " %(lang)s é divertido!"  %  { "lang" : "Python" })
 'Python é divertido!'
 ```
 
 _(7)_
-```
+```py
 >>> "Python é tão simples quanto {0}, {1}, {2}" . format ( "a" ,  "b" ,  "c" ) 
 'Python é tão simples quanto a, b, c' 
 >>> "Python é tão simples quanto {1}, {0}, {2}" . format ( "a" ,  "b" ,  "c" ) 
@@ -114,13 +114,13 @@ Há muitas outras coisas que você pode fazer com strings, como especificar uma 
 
  Uma lista é semelhante a um "array" e pode ser criada de duas maneiras:
 
-```
+```py
 >>> minha_lista  =  [] 
 >>> minha_lista  =  list ()
 ```
 Uma lista contém elementos como strings, inteiros e objetos, podendo conter todos misturados inclusive. O que podemos fazer também, é criar listas de listas:
 
-```
+```py
 >>> minha_lista_nested  =  [ minha_lista ,  minha_lista2 ] 
 >>> minha_lista_nested 
 [[1, 2, 3], ['a', 'b', 'c']]
@@ -128,7 +128,7 @@ Uma lista contém elementos como strings, inteiros e objetos, podendo conter tod
 
 Podemos também usar diferentes métodos para combinar duas listas como o método __extend__ ou apenas utilizando o operador __+__:
 
-```
+```py
 >>> minha_lista  =  [ 1 ,  2 ,  3 ] 
 >>> minha_lista2  =  [ "a" ,  "b" ,  "c" ] 
 >>> combo_list  =  minha_lista  +  minha_lista2 
@@ -144,7 +144,7 @@ Além disso, também podemos "fatiar" uma lista com os mesmos comandos que usamo
 
 Tuplas são semelhante a listas, mas são criadas com parenteses ao invés de colchetes. A diferença é que uma tupla é __imutável__, como podemos ver no exemplo a seguir:
 
-```
+```py
 >>> my_tuple = (1, 2, 3, 4, 5)
 >>> my_tuple[0:1]
 (1, 2, 3)
@@ -159,7 +159,7 @@ O ultimo exemplo (abc) é também um exemplo de __fundição__, no qual podemos 
 
 Um dicionário é basicamente uma __tabela hash__, podem ser chamados também de memorias associativas ou matrizes associativas. Os dicionarios são indexados com __chaves__ que podem ser de qualquer tipo imutável (uma string, um número, etc). Podemos obter uma lista de chaves utilizando o método __keys__. Para verificar se um dicionário tem uma chave, podemos usar a palavra-chave __in__. Um exemplo de criação de dicionário: 
 
-```
+```py
 >>> my_dict = {}
 >>> another_dict = dict()
 >>> my_other_dict = {"one":1, "two":2, "three":3}
@@ -177,7 +177,7 @@ Embora isso provavelmente não importe muito agora, em uma situação real de tr
 
  A instrução if no python é simples,porém, devemos tomar cuidado com os __espaços__ e executar o if primeiro e depois a mensagem. Usando como exemplo as variáveis temos: 
 
-```
+```py
 if var1 > var2 :
     print("Verdadeiro")
 else :
@@ -187,7 +187,7 @@ else :
 
  Analoga a outras linguagens de programação, as operações booleanas utilizam das operações __or__, __and__ e __not__, vejamos um exemplo de utilização:
 
-```
+```py
 x  =  10 
 y  =  10 
 if  x  ==  10  and  y  ==  15 : 
@@ -197,7 +197,7 @@ else :
 ```
 Podemos também usar os operadores booleanos para verificar elementos de listas:
 
-```
+```py
 my_list = [1, 2, 3, 4]
 x = 10
 if x not in my_list:
@@ -208,7 +208,7 @@ if x not in my_list:
 
  Em python uma string, tupla ou lista vazia também é avaliada como __False__, assim como a __None__. O valor None é usado para representar a ausência do valor. Vejamos um exemplo:
 
-```
+```py
 empty_list = []
 empty_tuple = ()
 empty_string = ""
@@ -241,7 +241,7 @@ Em python temos também caracteres especiais como __\n__ que pula linhas em um p
 
 Usamos o loop em Python todas vez que desejamos iterar algo repetidas vezes, e essas repetições são dadas por "n" vezes. Usaremos a função __range__ para entendermos como funciona, neste formato: `range(n)`. Esta função pega um número inteiro (n) e retorna um "range object". A função range também aceita um valor __inicial__, __final__ e um valor de __etapa__, nesta ordem. Aqui vai um exemplo:
 
-```
+```py
 >>> range(5,10)
 range(5, 10)
 >>> list(range(1, 10, 2))
@@ -249,12 +249,12 @@ range(5, 10)
 ```
 Entendendo a função range, podemos finalmente criar um laço de repetição usando o __for__ em qualquer __programa__ usando python, aqui vai um exemplo:
 
-```
+```py
 for number in range(5):
 print(number)
 ```
 Saída do código acima:
-```
+```py
 0
 1
 2
@@ -262,19 +262,19 @@ Saída do código acima:
 4
 ```
 Podemos perceber que `range(5)`=`[0, 1, 2, 3, 4]`. Podemos também usar um loop for com um dicionário, no qual ele percorre sobre as chaves dentro daquele dicionário:
-```
+```py
 a_dict = {"one":1, "two":2, "three":3}
 for key in a_dict:
     print(key)
 ```
 Saída do código acima:
-```
+```py
 three
 two
 one
 ```
 Agora, sabemos que as chaves podem ser classificadas, podemos fazer isso também antes de iterá-las. Podemos ver como funciona no código abaixo:
-```
+```py
 >>> a_dict = {1:"one", 2:"two", 3:"three"}
 >>> keys = a_dict.keys()
 >>> keys = sorted(keys)
@@ -282,7 +282,7 @@ Agora, sabemos que as chaves podem ser classificadas, podemos fazer isso também
        print(key)
 ```
 Saída do código acima:
-```
+```py
 1
 2
 3
@@ -290,13 +290,13 @@ Saída do código acima:
 Primeiro, criamos um dicionário que possui números inteiros para chaves. Em seguida, extraímos as chaves do dicionário (sempre que usarmos __keys()__, isso retornará uma lista não ordenada de chaves). Com isso, temos uma visão das chaves do dicionário, classificamos e então usamos o loop para percorrê-las.
 
 Para avançarmos um pouco mais no conceito de loops, usaremos agora um algoritmo que implementa um loop que imprime apenas números pares. Para isso, também implementaremos uma condicional:
-```
+```py
 >>> for number in range(10):
         if number % 2 == 0:
             print(number)
 ```
 Saída do código acima:
-```
+```py
 0
 2
 4
@@ -309,14 +309,14 @@ Utilizando o operador de módulo __%__ juntamente com a estrutura de condição,
 
 O loop while no Python é semelhante ao da linguagem C, repetindo o que estiver no loop 'n' vezes, dependendo de uma condição estabelecida:
 
-```
+```py
 >>> i = 0
 >>> while i < 10:
         print(i)
         i = i + 1
 ```
 Existe uma forma de sair de um loop sem que a condição seja completada, que é usando o comando `break`. No exemplo abaixo, conseguimos ver isso na prática analisando o código e sua saída:
-```
+```py
 >>> while i < 10:
         print(i)
         if i == 5:
@@ -324,7 +324,7 @@ Existe uma forma de sair de um loop sem que a condição seja completada, que é
         i += 1
 ```
 Saída do código acima:
-```
+```py
 0
 1
 2
@@ -335,7 +335,7 @@ Saída do código acima:
 O atalho `+=` é muito útil nesses tipos de programas, e também podemos usar com qualquer outro operador matemático além da adição.
 
 O break embutido é conhecido como uma ferramenta de controle de fluxo. Existe outro chamado `continue` que é usado basicamente para __pular uma iteração__ ou continuar com a próxima iteração. Esta é uma maneira de usá-lo:
-```
+```py
 i = 0
 
 while i < 10:
@@ -352,7 +352,7 @@ while i < 10:
 - __Else em Loops__
 
 A instrução else em loops só será executada se o loop for __concluído com sucesso__. O principal uso da instrução else é para __pesquisar itens__, como no código a seguir:
-```
+```py
 my_list = [1, 2, 3, 4, 5]
 
 for i in my_list:
@@ -374,61 +374,149 @@ A linguagem Python possui alguns métodos para criar listas e dicionários conhe
 A compreensão de lista é basicamente um loop for que produz uma estrutura de __lista__. Podemos visualizar isso melhor com um exemplo simples: `>>> x = [i for i in range(5)]`. Com isso se dermos um `print(x)` isso nos resultará uma lista contendo os inteiros de 0 até 4, isso pode ser útil quando queremos criar uma lista muito rapidamente. Seguimos para outro exemplo onde precisamos analisar um arquivo e procurar algo em particular, podemos usar uma comprrensão de lista como uma espécie de filtro.
 
 Uma outra utilização importante das compreensões de lista é a capacidade de __converter elementos mutaveis__:
-```
+```py
 >>> x = ['1', '2', '3', '4', '5']
 >>> y = [int(i) for i in x]
 >>> y
 ```
 Saída do código acima:
-```
+```py
 [1, 2, 3, 4, 5]
 ```
 
 Também há ocasiões em que é necessário criar uma compreensão de lista aninhada. Uma razão para fazer isso é nivelar várias listas em uma. Este exemplo vem da documentação do Python:
-```
+```py
 >>> vec = [[1,2,3], [4,5,6], [7,8,9]]
 >>> [num for elem in vec for num in elem]
 ```
 Saída do código acima:
-```
+```py
 [1, 2, 3, 4, 5, 6, 7, 8, 9]
 ```
 
 - __Compreensões de dicionário__
 
 São muito semelhantes a uma compreensão de lista na forma como são organizados, vejamos o exemplo a seguir:
-```
+```py
 >>> print( {i: str(i) for i in range(5)} )
 ```
 Saída do código acima:
-```
+```py
 {0: '0', 1: '1', 2: '2', 3: '3', 4: '4'}
 ```
 Esse código cria um dicionário onde a chave __i__ é mapeada para o valor __str(i)__ para cada valor i em __range(5)__, range(5) gera uma sequência de números de 0 a 4. Em Python, __str(i)__ é uma função que __converte o valor de i__ para uma __string__. Em outras palavras, str(i) transforma um número inteiro i em uma representação de string desse número, por exemplo, __se i for 5__ então __str(i) será '5'__.
 
 Agora podemos nos perguntar como poderíamos usar a compreensão de um dicionário na vida real. Uma das respostas é a possibilidade de efetuar __trocas__ de chaves e valores do dicionário. Vejamos como isso funciona:
-```
+```py
 >>> my_dict = {1:"dog", 2:"cat", 3:"hamster"}
 >>> print( {value:key for key, value in my_dict.items()} )
 ```
 Saída do código acima:
-```
+```py
 {'hamster': 3, 'dog': 1, 'cat': 2}
 ```
 Isso só funcionará se os valores do dicionário forem de um tipo não mutável, como uma string. Caso contrário, você acabará fazendo com que uma exceção seja levantada.
 - __Compreensões de Set__
 
 As compreensões de "set" são criadas da mesma maneira que as de um dicionário. Vamos ver um exemplo usando __set__:
-```
+```py
 >>> my_list = [1, 2, 2, 3, 4, 5, 5, 7, 8]
 >>> my_set = set(my_list)
 >>> my_set
 ```
 Saída do código acima:
-```
+```py
 set{1, 2, 3, 4, 5, 7, 8}
 ```
 
 
+### 7) Capítulo 7 - Tratamento de Exceções
 
+O tratamento de exceções é um recurso muito importante e utilizado em Python e outras linguagens para evitar que programas travem, ou executem de forma equivocada por conta de erros. Existem vários casos de exceções, algum deles são: __IOError__, __IndexError__, __SyntaxError__ entre outros.
 
+- __Lidando com exceções__
+
+Para lidar com exceções em Python não é muito complicado, ao longo deste resumo veremos alguns exemplos que causarão exceções, começaremos por um famoso, a __divisão por 0__:
+```py
+>>> 1 / 0
+Traceback (most recent call last):
+    File "<string>", line 1, in <fragment>
+ZeroDivisionError: integer division or modulo by zero
+```
+Para tratarmos isso, podemos usar diferentes métodos, um deles é utilizando o __except__ desta forma:
+```python
+try:
+    resultado = 10 / 0
+except ZeroDivisionError:
+    print("Divisão por zero não permitida.")
+```
+Agora toda vez que tivermos uma divisão por 0, a mensagem escrita no __print__ será exibida. Utilizamos isso também em casos mais complexos já vistos anteriormente, como em um dicionário:
+```python
+my_dict = {"a":1, "b":2, "c":3}
+try:
+        value = my_dict["d"]
+    except KeyError:
+        print("That key does not exist!")
+```
+Também podemos criar várias exceções com uma única instrução, e da mesma forma há varias maneiras de isso ser realizado. Veremos algumas delas agora:
+```python
+my_dict = {"a":1, "b":2, "c":3}
+try:
+    value = my_dict["d"]
+except IndexError:
+    print("This index does not exist!")
+except KeyError:
+    print("This key is not in the dictionary!")
+except:
+    print("Some other error occurred!")
+```
+A utilização do comando `except:` sem nada após os dois pontos, nos leva a uma mensagem geral para qualquer outro erro que possa ocorrer.
+
+Aqui está outra maneira de capturar múltiplas exceções:
+```python
+try:
+    value = my_dict["d"]
+except (IndexError, KeyError):
+    print("An IndexError or KeyError occurred!")
+```
+-  __Utilizando a declaração final__
+
+A declaração final é fácil de usar. Vamos dar uma olhada em um exemplo simples:
+```py
+my_dict = {"a":1, "b":2, "c":3}
+
+try:
+    value = my_dict["d"]
+except KeyError:
+    print("A KeyError occurred!")
+finally:
+    print("The finally statement has executed!")
+```
+Se executarmos o código acima, ele irá imprimir a instrução __except__ e a __finally__ simultaneamente, essa instrução é muito utilizada para alguma mensagem que queremos passar antes da finalização do programa.
+
+- __Try, except, or else__
+
+A instrução __try/except__ também possui uma cláusula __else__. O else só será executado se não houver erros gerados. Passaremos alguns momentos examinando alguns exemplos:
+```py
+my_dict = {"a":1, "b":2, "c":3}
+
+try:
+    value = my_dict["a"]
+except KeyError:
+    print("A KeyError occurred!")
+else:
+    print("No error occurred!")
+```
+E juntando tudo que aprendemos, podemos criar um tratamento completo, como por exemplo:
+```py
+my_dict = {"a":1, "b":2, "c":3}
+
+try:
+    value = my_dict["a"]
+except KeyError:
+    print("A KeyError occurred!")
+else:
+    print("No error occurred!")
+finally:
+    print("The finally statement ran!")
+```

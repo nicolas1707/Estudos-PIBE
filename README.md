@@ -5,7 +5,7 @@
 
 Guia: Criar um resumo para cada capítulo e testar os comandos do tutorial diretamente no terminal do vscode (comando `python3` para iniciar). -> Para acessar, usamos CTRL+SHIFT+P e buscamos Create New Terminal
 
-Notas: Se quisermos verificar algum teste no compilador, igual fazemos nas linhas de comando, usamos print("comando") caso este comando apareça alguma mensagem feita pelo python.
+Notas: Se quisermos verificar algum teste no compilador, igual fazemos nas linhas de comando, usamos print("comando") caso este comando apareça alguma mensagem feita pelo python. No python, sempre que formos fazer uma estrutura de programa nas linhas de comando, devemos respeitar os __espaçamentos__ dados pela tecla __TAB__.
 
 ### 1) Capítulo 1: Programação IDLE 
 - __Usando IDLE__
@@ -507,7 +507,7 @@ except KeyError:
 else:
     print("No error occurred!")
 ```
-E juntando tudo que aprendemos, podemos criar um tratamento completo, como por exemplo:
+E juntando tudo que aprendemos, podemos criar um tratamento completo, como por exemplo: 
 ```py
 my_dict = {"a":1, "b":2, "c":3}
 
@@ -520,3 +520,104 @@ else:
 finally:
     print("The finally statement ran!")
 ```
+
+
+### 8) Capítulo 8 - Trabalhando com Arquivos
+
+- __Como ler um arquivo__
+
+Python tem uma função interna chamada __open__ que podemos usar para abrir um determinado arquivo para leitura. Vamos criar um arquivo de texto chamado "teste.txt", e realizar os seguintes comandos para a realização da abertura no Linux:
+```py
+handle = open("Teste.txt")
+handle = open("/home/nicolas.fs/Downloads/Teste.txt", "r")
+```
+
+No primeiro exemplo, o Python procurará automaticamente teste.txt na pasta em que o script está sendo executado (GitHub), se não encontrar, você receberá um IOError, não é uma maneira qualificada.
+
+No segundo exemplo temos um exemplo melhor, onde é especificado claramente onde está o arquivo. Podemos reparar também que está escrito __"r"__ ao final da linha, isso significa que o arquivo abrirá para __somente leitura__, existem várias outras funções de abertura como escrita (__"w"__), leitura e escrita (__"a"__) e etc.
+
+No windows, temos que tomar cuidado com a __barra inversa__, logo devemos adicionar antes do local do arquivo a letra __r__ para não haver conflito com os caracteres especiais, desta forma: `handle = open(r"C:\Users\nicolas\dowloads\Teste.txt", "r")`
+
+Outra coisa que podemos fazer é realizar a leitura do arquivo, guardar em uma variável de dados, imprimir os dados e fechar o identificador para economizar memória e para caso outro programa queira abri-lo.
+
+```py
+>>> handle = open("/home/nicolas.fs/Downloads/Teste.txt", "r")
+>>> data = handle.read()
+>>> print(data)
+>>> handle.close()
+```
+Vejamos agora algumas diferentes maneiras de ler um arquivo: lendo uma linha de cada vez _(1)_ e lendo todas as linhas _(2)_ esse na qual as linhas são retornadas em uma __lista__.
+
+_(1)_
+```py
+handle = open("/home/nicolas.fs/Downloads/Teste.txt", "r")
+data = handle.readline() # read just one line
+print(data)
+handle.close()
+```
+_(2)_
+```py
+handle = open("/home/nicolas.fs/Downloads/Teste.txt", "r")
+data = handle.readlines() # read ALL the lines!
+print(data)
+handle.close()
+```
+
+- __Como ler arquivos parte por parte__
+
+A maneira mais simples de se ler um arquivo em partes é usar um loop. Primeiro veremos como ler um arquivo __linha por linha__, e depois veremos como ler um __kilobyte__ de cada vez. Usaremos um loop for no nosso primeiro exemplo:
+```py
+handle = open("Teste.txt", "r")
+
+for line in handle:
+    print(line)
+
+handle.close()
+```
+Aqui abrimos um arquivo somente leitura e usamos um loop para iterar sobre ele, agora vamos fazer isso em pedaços:
+```py
+handle = open("Teste.txt", "r")
+
+while True:
+    data = handle.read(1024)
+    print(data)
+    if not data:
+        break
+```
+Neste exemplo, usamos o loop while do Python para ler um kilobyte do arquivo por vez (1.024 bytes). Agora veremos como ler outros arquivos.
+
+- __Como ler um arquivo binário__
+
+Para ler um arquivo binário, tudo que precisamos fazer é alterar o __tipo e modo do arquivo__: `handle = open("Teste.pdf", "rb")`. Então desta vez alteramos o modo do arquivo para __rb__, o que significa __read-binary__.
+
+- __Escrevendo arquivos em Python__
+
+Utilizaremos agora para realizar gravação em arquivos os modos __w__ e __wb__, mas __CUIDADO__, ao usar os modos w ou wb, se o arquivo já existir, ele será sobrescrito __sem aviso prévio__ (usaremos o arquivo guardado na máquina, pois o do GitHub é salvo como uma tupla).
+```py
+handle = open("/home/nicolas.fs/Downloads/Teste.txt", "w")
+handle.write("This is a test!")
+handle.close()
+```
+
+- __Usando o operador With__
+
+Python tem um pequeno recurso interno chamado de __with__, no qual podemos usar para simplificar arquivos de leitura e escrita. O operador with cria o que é conhecido como __gerenciador de texto__ em Python, que fechará automaticamente o arquivo para você qundo terminar de processar.
+```py
+with open("/home/nicolas.fs/Downloads/Teste.txt") as file_handler:
+    for line in file_handler:
+        print(line)
+```
+
+- __Capturando erros__
+
+Da mesma forma que tínhamos no capítulo anterior, podemos tratar alguns erros utilizando __with__, no exemplo que veremos a seguir, não precisamos fazer a __declaração final__ como fizemos anteriormente, pois o gerenciador de contexto irá cuidar disso.
+```py
+try:
+    with open("/home/nicolas.fs/Downloads/Teste.txt") as file_handler:
+        for line in file_handler:
+            print(line)
+except IOError:
+    print("An IOError has occurred!")
+```
+
+

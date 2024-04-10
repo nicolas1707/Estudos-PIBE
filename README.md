@@ -641,7 +641,10 @@ Nem todas as vezes queremos importar todas as funções de um módulo, para isso
 >>>from math import sqrt
 >>>sqrt(16)
 ```
-Também podemos implementar múltiplas funções usando da seguinte forma: `from math import pi, sqrt, ...`
+Também podemos implementar múltiplas funções usando da seguinte forma: 
+```py
+from math import pi, sqrt, ...
+```
 
 - __Importanto tudo__
 

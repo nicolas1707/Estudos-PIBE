@@ -621,3 +621,36 @@ except IOError:
 ```
 
 
+### 9) Capítulo 9 - Importando
+
+Python vem com muitos códigos pré-prontos, esses códigos são conhecidos como módulos e pacotes. Um módulo é um único arquivo Python importável, enquanto um pacote é dois ou mais destes módulos. Sempre que salvamos um script no Python, criamos um módulo.
+
+- __Import this__
+
+O python possuí um comando específico para esta ação, que seria o `import this`. Se executarmos esse código, veremos o que chamamos de o "Zen do Python". Isso na verdade não faz nada, mas fornece uma maneira divertida de mostrar como importar algo. Importemos agora algo que iremos utilizar:
+```py
+>>>import math
+>>>math.sqrt(4)
+```
+Aqui importamos um __módulo matemático__ e depois fizemos uma de suas funções, no caso, a função __sqrt__. Este módulo possuí várias outras funções matemáticas que conhecemos e podemos utilizar.
+
+- __Usando from para importar__
+
+Nem todas as vezes queremos importar todas as funções de um módulo, para isso, usamos o comando __from__ para importar apenas funções selecionadas de um módulo:
+```py
+>>>from math import sqrt
+>>>sqrt(16)
+```
+Também podemos implementar múltiplas funções usando da seguinte forma: `from math import pi, sqrt, ...`
+
+- __Importanto tudo__
+
+Python também fornece uma maneira de importar __todas__ as funções e valores de um módulo. Mas devemos tomar cuidado para não contaminar nosso __namespace__(lugar onde todas as variáveis residem), criando um variável com o mesmo nome de uma função, como por exemplo:
+```py
+from math import *
+>>> sqrt = 5
+>>> sqrt(16)
+```
+Isso irá gerar um erro do tipo `'int' object is not callable`.
+
+Finalmente, para importar tudo, em vez de especificar uma lista de itens apenas usamos o símbolo __*__.

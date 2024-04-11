@@ -657,3 +657,82 @@ from math import *
 Isso irá gerar um erro do tipo `'int' object is not callable`.
 
 Finalmente, para importar tudo, em vez de especificar uma lista de itens apenas usamos o símbolo __*__.
+
+
+### 10) Capítulo 10 - Funções
+
+Uma função é uma estrutura que __definimos__, juntamente com seus argumentos, que podem ser palavras-chave e argumentos padrão. Uma função é um bloco de código que começa com a palavra-chave __def__, aqui está um exemplo simples:
+```py
+>>> def funcao ():
+    print("Função definida")
+```
+
+- __Uma função vazia__
+
+Às vezes queremos definir uma função sem colocar nenhum código nelas, podemos fazer isso usando o comando __pass__, desta forma:
+```py
+>>> def empty_func():
+    pass
+```
+
+- __Passando argumentos para uma função__
+
+Agora aprenderemos como criar uma função que pode aceitar argumentos e como passar esses argumentos. Criaremos uma função simples para visualização:
+```py
+>>> def add(a, b):
+        return a + b
+```
+Após definirmos, podemos colocar os argumentos usando `>>> add(1, 2)` resultando neste caso no número __3__.
+
+Todas as funções retornam algo, se não especificarmos o que retornar ela irá retornar __None__. O que podemos fazer também, é chamar a função juntamente com seus argumentos:
+```py
+>>> total = add(b=4, a=5)
+>>> print(total)
+```
+Saída do código acima: `9`.
+
+- __Argumentos de palavras-chave__
+
+As funções também podem aceitar argumentos de palavra-chave. O que significa que podemos especificar quais queremos passar. Vejamos um exemplo:
+```py
+>>> def keyword_function(a=1, b=2):
+        return a+b
+
+>>> keyword_function(b=4, a=5)
+```
+Isso faz com que __a__ e __b__ tenham valores padrão definidos (1 e 2 nesse caso).
+
+- __*args e **kwargs__
+
+Também podemos configurar funções para aceitar qualquer número de argumentos usando uma sintaxe especial. Para obtermos infinitos argumentos usamos __*args__ e para palavras-chave usamos __**kwargs__. Vejamos como isso funciona na prática:
+```py
+>>> def many(*args, **kwargs):
+        print(args)
+        print(kwargs)
+>>> many(1, 2, 3, name="Mike", job="programmer")
+```
+Saída do código acima:
+```py
+(1, 2, 3)
+{'job': 'programmer', 'name': 'Mike'}
+```
+A própria função imprime dois tipos de argumentos. E como podemos ver, o parâmetro __args__ se transforma em uma __tupla__ e __kwargs__ em um __dicionario__.
+
+- __Uma nota sobre escopo e variáveis globais__
+
+Python tem o conceito de __escopo__, o escopo nos dirá quando uma variável está disponível para uso e onde. Se definirmos as variáveis dentro de uma função, essas variáveis só poderão ser usadas dentro dessa função. Depois que a função termina eles não podem mais ser usados pois estão __fora do escopo__, com isso, precisamos definir variáveis __globais__, como por exemplo a variável __a__ que veremos no exemplo a seguir:
+```py
+>>>def function_a():
+    global a
+    a = 1
+    b = 2
+    return a+b
+
+>>>def function_b():
+    c = 3
+    return a+c
+
+>>>print( function_a() )
+>>>print( function_b() )
+```
+

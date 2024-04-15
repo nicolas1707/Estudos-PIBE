@@ -7,6 +7,8 @@ Guia: Criar um resumo para cada capítulo e testar os comandos do tutorial diret
 
 Notas: Se quisermos verificar algum teste no compilador, igual fazemos nas linhas de comando, usamos print("comando") caso este comando apareça alguma mensagem feita pelo python. No python, sempre que formos fazer uma estrutura de programa nas linhas de comando, devemos respeitar os __espaçamentos__ dados pela tecla __TAB__.
 
+## Parte 1: Aprendendo o Básico
+
 ### 1) Capítulo 1: Programação IDLE 
 - __Usando IDLE__
 
@@ -736,3 +738,124 @@ Python tem o conceito de __escopo__, o escopo nos dirá quando uma variável est
 >>>print( function_b() )
 ```
 
+
+### 11) Capítulo 11 - Classes
+
+Tudo em Python é um objeto, o que significa que tudo em Python possuí métodos e valores. Por exemplo, se atribuírmos uma string a variável __x__, essa string irá possuir __muitos métodos__. Se usarmos a palavra chave `dir (x)`poderemos obter uma lista de todos esses métodos. Ou seja, isso significa que uma string é baseada em uma classe e __x__ é uma __instância__ dessa classe!
+
+- __Criando uma classe__
+
+Uma classe em Python pode ser definida desta forma:
+```py
+class Vehicle:
+    """docstring"""
+
+    def __init__(self):
+        """Constructor"""
+        pass
+```
+Para criar a classe utilizamos a palavra chave __class__, seguida do __nome da classe__, e com o __objeto__ que é o que a classe se baseia ou herda. As classes possuem um método especial chamado `__init__`(para inicialização). Este método é chamado sempre que você cria um objeto baseado nesta classe. Este método é chamado apenas uma vez e não deve ser chamada novamente dentro do programa. Outro termo para o init é __constructor__, mas não é muito usual. Vamos expandir um pouco nossa definição de classe:
+```py
+class Vehicle(object):
+    """docstring"""
+
+    def __init__(self, color, doors, tires):
+        """Constructor"""
+        self.color = color
+        self.doors = doors
+        self.tires = tires
+
+    def brake(self):
+        """
+        Stop the car
+        """
+        return "Braking"
+
+    def drive(self):
+        """
+        Drive the car
+        """
+        return "I'm driving!
+```
+O código acima adicionou três atributos e dois métodos. Os três atributos são:
+```
+self.color = color
+self.doors = doors
+self.tires = tires
+```
+Os métodos são:
+```
+brake
+drive
+```
+Os atributos __descrevem o veículo__. Então o veículo tem uma cor, um certo número de portas e um certo número de pneus. Também possui dois métodos. Um método __descreve o que uma classe faz__. Portanto, neste caso, um veículo pode frear e dirigir.
+
+- __O que é "self"__
+
+As classes em Python precisam de uma maneira de se referirem a si mesmas, a palavra __self__ é uma forma de se descrever. Daremos uma olhada em um exemplo a seguir:
+```py
+class Vehicle(object):
+    """docstring"""
+
+    def __init__(self, color, doors, tires, vtype):
+        """Constructor"""
+        self.color = color
+        self.doors = doors
+        self.tires = tires
+        self.vtype = vtype
+
+    def brake(self):
+        """
+        Stop the car
+        """
+        return "%s braking" % self.vtype
+
+    def drive(self):
+        """
+        Drive the car
+        """
+        return "I'm driving a %s %s!" % (self.color, self.vtype)
+
+if __name__ == "__main__":
+    car = Vehicle("blue", 5, 4, "car")
+    print(car.brake())
+    print(car.drive())
+
+    truck = Vehicle("red", 3, 6, "truck")
+    print(truck.drive())
+    print(truck.brake())
+```
+Neste exemplo, passamos outro parâmetro para informar à classe qual tipo de veículo estamos criando. Em seguida, chamamos cada método para cada instância. Se você executar este código, deverá ver a seguinte saída:
+```
+car braking
+I'm driving a blue car!
+I'm driving a red truck!
+truck braking
+```
+- __Subclasses__
+
+Anteriormente, mesmo que não tenha sido especificado foi subclassificado __object__. Como object não é muito interessante, os exemplos anteriores não demonstram realmente o poder da subclasse. Então, vamos subclassificar nossa classe Vehicle e descobrir como tudo isso funciona:
+```py
+class Car(Vehicle):
+    """
+    The Car class
+    """
+
+    def brake(self):
+        """
+        Override brake method
+        """
+        return "The car class is breaking slowly!"
+
+if __name__ == "__main__":
+    car = Car("yellow", 2, 4, "car")
+    car.brake()
+    'The car class is breaking slowly!'
+    car.drive()
+    "I'm driving a yellow car!"
+```
+Neste caso nós criamos uma subclasse da nossa classe __Vehicle__. Podemos notar que `__init__`ou outro método não foi incluído. A razão disso é que quando subclassificamos Vehicle, obtemos todos os seus atributos e métodos. Assim, podemos notar que substituímos o método __brake__ e o fizermos dizer algo diferente do padrão. 
+
+Usar os valores padrão da classe pai é conhecido como __herança__. Este é um grande tópico utilizado em __Programação Orientada a Objetos__. Este também é um exemplo simples de polimorfismo . As classes polimórficas normalmente têm as mesmas interfaces (ou seja, métodos, atributos), mas não têm conhecimento uma da outra.
+
+## Parte 2: Aprendendo com a Biblioteca

@@ -859,3 +859,168 @@ Neste caso nós criamos uma subclasse da nossa classe __Vehicle__. Podemos notar
 Usar os valores padrão da classe pai é conhecido como __herança__. Este é um grande tópico utilizado em __Programação Orientada a Objetos__. Este também é um exemplo simples de polimorfismo . As classes polimórficas normalmente têm as mesmas interfaces (ou seja, métodos, atributos), mas não têm conhecimento uma da outra.
 
 ## Parte 2: Aprendendo com a Biblioteca
+
+### 12) Capítulo 12 - Introspecção
+
+- __The Python type__
+
+Algo interessante do Python é que ele pode nos dizer que tipo de variável possuímos e de que __tipo__ ela é, é uma pequena ferramenta muito útil que aprenderemos a usar como neste exemplo:
+```py
+>>> x = "test"
+>>> y = 7
+>>> z = None
+
+>>> type(x)
+
+>>> type(y)
+
+>>> type(z)
+
+```
+Saída do código acima:
+```
+<class 'str'>
+<class 'int'>
+<class 'NoneType'>
+```
+Como podemos ver, o Python tem uma palavra-chave chamada __type__ que nos possibilita dizer qual o tipo de cada variável.
+
+- __O diretório em Python__
+
+Como já vimos em alguns casos, a palavra __dir__ é usada para informar ao programador quais atributos e métodos existem no __objeto__ passado. Como tudo em Python é um objeto, podemos passar uma string para dir e descobrir quais métodos ela possui utilizando `>>> import sys` e `dir(sys)`.
+
+A função dir é extremamente útil para os pacotes de terceiros que baixamos (ou iremos baixar em breve) e que possuem pouca ou nenhuma documentação.
+
+- __Python Help!__
+
+Python vem com um prático utilitário de ajuda, basta digitar `help()` em um shell Python e você verá instruções. (Para sair do terminal de ajuda bastapressionar __Q__).
+
+Se digitarmos __module__ veremos um atraso enquanto o Python pesquisa pastas da biblioteca para adquirir uma lista. Se foi instalado muitos módulos de terceiros, isso pode demorar um pouco.
+
+
+### 13) O Módulo CSV
+
+O módulo csv oferece ao programador a capacidade de __analisar arquivos CSV__. Um arquivo CSV (comma-separated value) é um arquivo de __texto legível__, onde cada linha possuí vários campos, __separados por vírgulas__ ou algum outro delimitador.
+
+O formato CSV não possuí padrão, mas são semelhantes o suficiente para que o módulo csv seja capaz de ler a grande maioria dos arquivos em CSV.
+
+- __Lendo um arquivo CSV__
+
+Existem duas maneiras de ler um arquivo CSV, podemos usar uma função __reader__ ou a classe __DictReader__. Antes de testarmos os 2 métodos precisamos obter um arquivo CSV, usaremos o site da OMS para baixar algumas informações.
+```py
+import csv
+
+def csv_reader(file_obj):
+    """
+    Read a csv file
+    """
+    reader = csv.reader(file_obj)
+    for row in reader:
+        print(" ".join(row))
+
+if __name__ == "__main__":
+    csv_path = "CSV.csv"
+    with open(csv_path, "r") as f_obj:
+        csv_reader(f_obj)
+```
+Primeiro importamos o __módulo csv__, então criamos uma função chamada __csv_reader__ que aceita um objeto de arquivo. Dentro da função, passamos o objeto __file__ para a função. O objeto leitor permite a iteração, assim como um objeto de arquivo normal, isso nos permite iterar cada linha no objeto leitor e imprimir a linha de dados (menos víergulas).
+
+Agora criaremos nosso próprio arquivo CSV e iremos inseri-lo na classe __DictReader__. Iremos salvar este arquivo com o nome de __data.csv__, e vamos analisar o arquivo usando a classe DictReader, vamos experimentar:
+
+```py
+import csv
+
+def csv_dict_reader(file_obj):
+    """
+    Read a CSV file using csv.DictReader
+    """
+    reader = csv.DictReader(file_obj, delimiter=',')
+    for line in reader:
+        print(line["first_name"]),
+        print(line["last_name"])
+
+if __name__ == "__main__":
+    with open("data.csv") as f_obj:
+        csv_dict_reader(f_obj)
+```
+No exemplo acima, abrimos um arquivo e passamos o file_obj para nossa função como fizemos antes, e ela passa o file_object para nossa classe __DictReader__, e dizemos a ele que o delimitador é uma vírgula. Em seguida, percorremos o file_object e descobrimos que cada linha no file_object é um dicionário, isso torna muito fácil __imprimir peças específicas__.
+
+- __Escrevendo um arquivo CSV__
+
+O módulo csv também possuí dois métodos que você pode usar para gravar um arquivo CSV. Podemos usar a função __writer__ ou a classe __DicWriter__ para isso. Veremos agora um exemplo usando a função:
+```py
+import csv
+
+def csv_writer(data, path):
+    """
+    Write data to a CSV file path
+    """
+    with open(path, "w", newline='') as csv_file:
+        writer = csv.writer(csv_file, delimiter=',')
+        for line in data:
+            writer.writerow(line)
+
+if __name__ == "__main__":
+    data = ["first_name,last_name,city".split(","),
+            "Tyrese,Hirthe,Strackeport".split(","),
+            "Jules,Dicki,Lake Nickolasville".split(","),
+            "Dedric,Medhurst,Stiedemannberg".split(",")
+            ]
+    path = "output.csv"
+    csv_writer(data, path)
+```
+No código acima criamos uma função __csv_writer__ que aceita dois argumentos: __dados__ e __caminho__. Os __dados__ são uma lista de listas que criamos na parte inferior do script, usamos uma versão abreviada dos dados do exemplo anterior e dividimos as strings por vírgulas, isso retorna __uma lista__, então terminamos com uma lista alinhada parecida com esta:
+```
+[[ 'nome' ,  'sobrenome' ,  'cidade' ], 
+ [ 'Tyrese' ,  'Hirthe' ,  'Strackeport' ], 
+ [ 'Jules' ,  'Dicki' ,  'Lake Nickolasville' ], 
+ [ 'Dedric' ,  ' Medhurst' ,  'Stiedemannberg' ]]
+ ```
+
+Essa função abre o caminho para que passemos e criemos um _csv writer object_. Em seguida, percorremos a estrutura da lista aninhada e gravamos cada linha no disco, observe que especificamos qual deveria ser o delimitador quando criamos o _writer object_. Se quisermos que o delimitador seja algo além de uma vírgula, é aqui que devemos defini-lo.
+
+Agora iremos aprender a como escrever um arquivo CSV usando a classe __DictWriter__. Usaremos os dados da versão anterior e transformá-los em uma lista de dicionários. Vamos dar uma olhada em como isso funciona:
+```py
+import  csv 
+
+def  csv_dict_writer ( path ,  fieldnames ,  data ): 
+    """ 
+    Grava um arquivo CSV usando DictWriter 
+    """ 
+    com  open ( path ,  "w" ,  newline = '' )  como  out_file : 
+        writer  =  csv . DictWriter ( out_file ,  delimiter = ',' ,  fieldnames = fieldnames ) 
+        escritor . writeheader () 
+        para  linha  em  dados : 
+            escritor . writerow ( linha ) 
+
+if  __name__  ==  "__main__" : 
+    data  =  [ "first_name,last_name,city" . dividir ( "," ), 
+            "Tyrese,Hirthe,Strackeport" . divisão ( "," ), 
+            "Jules, Dicki, Lago Nickolasville" . dividir ( "," ), 
+            "Dedric,Medhurst,Stiedemannberg" . split ( "," ) 
+            ] 
+    minha_lista  =  [] 
+    nomes de campos  =  dados [ 0 ] 
+    para  valores  em  dados [ 1 :]: 
+        inner_dict  =  dict ( zip ( nomes de campos ,  valores )) 
+        minha_lista . anexar ( inner_dict ) 
+
+    caminho  =  "dict_output.csv" 
+    csv_dict_writer ( caminho ,  nomes de campos ,  minha_lista )
+    
+```
+Como podemos ver, começamos com a estrutura de __lista aninhada__ que tínhamos antes, em seguida, criamos uma lista vazia e uma lista que contém os __nomes dos campos__, que é a primeira lista dentro da lista aninhada (temos que lembrar que as listas são baseadas em zero, então o primeiro elemento de uma lista começa em zero). Em seguida, fazemos um __loop__ na construção da lista aninhada começando com o segundo elemento.
+
+Dentro do loop usamos recursos internos do Python para criar o dicionário. O método __zip__ pegará dois iteradores e os transformará em uma lista de __tuplas__, como o exemplo a seguir:
+```py
+zip(fieldnames, values)
+[('first_name', 'Dedric'), ('last_name', 'Medhurst'), ('city', 'Stiedemannberg')]
+```
+Agora, quando agrupamos essa chamada em __dict__, ela transforma essa lista de tuplas em um __dicionário__, e finalmente, acrescentamos o dicionário à lista. Quando o laço __for__ termina, teremos uma estrutura de dados semelhante a essa:
+```
+[{'cidade': 'Strackeport', 'primeiro_nome': 'Tyrese', 'sobrenome': 'Hirthe'},
+{'cidade': 'Lake Nickolasville', 'primeiro_nome': 'Jules', 'sobrenome': 'Dicki'}, {'cidade': 'Stiedemannberg', 'primeiro_nome': 'Dedric', 'sobrenome': 'Medhurst '}]
+```
+No final da segunda sessão, chamamos nossa função __csv_dict_writer__ e passamos todos os argumentos necessários. Dentro da função, criamos uma instância DictWriter e passamos a ela um objeto de arquivo, um valor delimitador e nossa lista de nomes de campos. Em seguida, escrevemos os nomes dos campos no disco e percorremos os dados, uma linha por vez, gravando os dados no disco.
+
+A classe DictWriter também suporta o método __writerows__, que poderíamos ter usado em vez do loop. A função csv.writer também oferece suporte a essa funcionalidade.

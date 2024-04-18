@@ -981,33 +981,32 @@ Essa função abre o caminho para que passemos e criemos um _csv writer object_.
 
 Agora iremos aprender a como escrever um arquivo CSV usando a classe __DictWriter__. Usaremos os dados da versão anterior e transformá-los em uma lista de dicionários. Vamos dar uma olhada em como isso funciona:
 ```py
-import  csv 
+import csv
 
-def  csv_dict_writer ( path ,  fieldnames ,  data ): 
-    """ 
+def csv_dict_writer(path, fieldnames, data):
+    """
     Grava um arquivo CSV usando DictWriter 
-    """ 
-    com  open ( path ,  "w" ,  newline = '' )  como  out_file : 
-        writer  =  csv . DictWriter ( out_file ,  delimiter = ',' ,  fieldnames = fieldnames ) 
-        escritor . writeheader () 
-        para  linha  em  dados : 
-            escritor . writerow ( linha ) 
+    """
+    with open(path, "w", newline='') as out_file:
+        writer = csv.DictWriter(out_file, delimiter=',', fieldnames=fieldnames)
+        writer.writeheader()
+        for row in data:
+            writer.writerow(row)
 
-if  __name__  ==  "__main__" : 
-    data  =  [ "first_name,last_name,city" . dividir ( "," ), 
-            "Tyrese,Hirthe,Strackeport" . divisão ( "," ), 
-            "Jules, Dicki, Lago Nickolasville" . dividir ( "," ), 
-            "Dedric,Medhurst,Stiedemannberg" . split ( "," ) 
-            ] 
-    minha_lista  =  [] 
-    nomes de campos  =  dados [ 0 ] 
-    para  valores  em  dados [ 1 :]: 
-        inner_dict  =  dict ( zip ( nomes de campos ,  valores )) 
-        minha_lista . anexar ( inner_dict ) 
+if __name__ == "__main__":
+    data = ["first_name,last_name,city".split(","),
+            "Tyrese,Hirthe,Strackeport".split(","),
+            "Jules,Dicki,Lake Nickolasville".split(","),
+            "Dedric,Medhurst,Stiedemannberg".split(",")
+            ]
+    my_list = []
+    fieldnames = data[0]
+    for values in data[1:]:
+        inner_dict = dict(zip(fieldnames, values))
+        my_list.append(inner_dict)
 
-    caminho  =  "dict_output.csv" 
-    csv_dict_writer ( caminho ,  nomes de campos ,  minha_lista )
-    
+    path = "dict_output.csv"
+    csv_dict_writer(path, fieldnames, my_list)
 ```
 Como podemos ver, começamos com a estrutura de __lista aninhada__ que tínhamos antes, em seguida, criamos uma lista vazia e uma lista que contém os __nomes dos campos__, que é a primeira lista dentro da lista aninhada (temos que lembrar que as listas são baseadas em zero, então o primeiro elemento de uma lista começa em zero). Em seguida, fazemos um __loop__ na construção da lista aninhada começando com o segundo elemento.
 

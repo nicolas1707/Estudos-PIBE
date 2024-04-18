@@ -1024,3 +1024,184 @@ Agora, quando agrupamos essa chamada em __dict__, ela transforma essa lista de t
 No final da segunda sessão, chamamos nossa função __csv_dict_writer__ e passamos todos os argumentos necessários. Dentro da função, criamos uma instância DictWriter e passamos a ela um objeto de arquivo, um valor delimitador e nossa lista de nomes de campos. Em seguida, escrevemos os nomes dos campos no disco e percorremos os dados, uma linha por vez, gravando os dados no disco.
 
 A classe DictWriter também suporta o método __writerows__, que poderíamos ter usado em vez do loop. A função csv.writer também oferece suporte a essa funcionalidade.
+
+
+### 14) Capítulo 14 - Configparser
+
+Os arquivos de configuração são usados para armazenar as configurações de aplicativos, ou até mesmo do sistema operacional. A biblioteca principal do Python incluí um módulo chamado __configparser__ que você pode usar para criar e interagir com arquivos de configuração.
+
+- __Criando um arquivo de configuração__
+
+Criar um arquivo de configuração com configparser é extremamente simples, vamos ver um exemplo de como isso funciona:
+```py
+import configparser
+
+def createConfig(path):
+    """
+    Create a config file
+    """
+    config = configparser.ConfigParser()
+    config.add_section("Settings")
+    config.set("Settings", "font", "Courier")
+    config.set("Settings", "font_size", "10")
+    config.set("Settings", "font_style", "Normal")
+    config.set("Settings", "font_info",
+               "You are using %(font)s at %(font_size)s pt")
+
+    with open(path, "w") as config_file:
+        config.write(config_file)
+
+
+if __name__ == "__main__":
+    path = "settings.ini"
+    createConfig(path)
+```
+O código acima criará um __arquivo de configuração__ com uma seção chamada __Settings__ que conterá quatro opções: __font, font_size, font_style__ e __font_info__. No Python 3 só precisamos especificar que estamos escrevendo o arquivo no modo __somente gravação__ ou seja, no modo __w__.
+
+- __Como ler, atualizar e excluir opções__
+
+Agora estamos prontos para aprender como ler, atualizar e deletar opções nos arquivos de configuração:
+```py
+import configparser
+import os
+
+def crudConfig(path):
+    """
+    Create, read, update, delete config
+    """
+    if not os.path.exists(path):
+        createConfig(path)
+
+    config = configparser.ConfigParser()
+    config.read(path)
+
+    # lê alguns valores da configuração
+    font = config.get("Settings", "font")
+    font_size = config.get("Settings", "font_size")
+
+    # altera um valor na configuração
+    config.set("Settings", "font_size", "12")
+
+    # exclui um valor da configuração
+    config.remove_option("Settings", "font_style")
+
+    # grava as alterações de volta no arquivo de configuração
+    with open(path, "w") as config_file:
+        config.write(config_file)
+
+
+if __name__ == "__main__":
+    path = "settings.ini"
+    crudConfig(path)
+```
+
+Primeiramente, o código acima verifica se o caminho para o arquivo de configuração __existe__; caso não, ele usa a função __createConfig__ que utilizamos anteriormente para criá-lo. Em seguida, criamos um __objeto__ chamado __ConfigParser__ e passamos o caminho do arquivo de configuração para leitura. Para ler uma opção no arquivo, chamamos o método __get__ do nosso objeto, passando a ele o __nome da seção__ e o __nome da opção__. Isso retornará o valor da opção. Se quisermos alterar o valor de alguma opção, utilizamos o método __set__, onde passamos o nome da seção, o nome da opção e o __novo valor__.
+
+Neste código de exemplo, alteramos o valor de __font_size__ para __12__ e removemos completamente a opção __font_style__. Em seguida, gravamos as alterações de volta no disco.
+
+Este não é um bom exemplo, pois __nunca__ devemos ter __uma função que faça tudo__ como esta. Então a dividiremos em uma série de funções:
+```py
+import configparser
+import os
+
+def create_config(path):
+    """
+    Cria um arquivo de configuração
+    """
+    config = configparser.ConfigParser()
+    config.add_section("Settings")
+    config.set("Settings", "font", "Courier")
+    config.set("Settings", "font_size", "10")
+    config.set("Settings", "font_style", "Normal")
+    config.set("Settings", "font_info",
+               "You are using %(font)s at %(font_size)s pt")
+
+    with open(path, "w") as config_file:
+        config.write(config_file)
+
+
+def get_config(path):
+    """
+    Retorna o objeto de configuração
+    """
+    if not os.path.exists(path):
+        create_config(path)
+
+    config = configparser.ConfigParser()
+    config.read(path)
+    return config
+
+
+def get_setting(path, section, setting):
+    """
+    Imprimir uma configuração
+    """
+    config = get_config(path)
+    value = config.get(section, setting)
+    msg = "{section} {setting} is {value}".format(
+        section=section, setting=setting, value=value)
+    print(msg)
+    return value
+
+
+def update_setting(path, section, setting, value):
+    """
+    Atualizar uma configuração
+    """
+    config = get_config(path)
+    config.set(section, setting, value)
+    with open(path, "w") as config_file:
+        config.write(config_file)
+
+
+def delete_setting(path, section, setting):
+    """
+    Excluir uma configuração
+    """
+    config = get_config(path)
+    config.remove_option(section, setting)
+    with open(path, "w") as config_file:
+        config.write(config_file)
+
+
+
+if __name__ == "__main__":
+    path = "settings.ini"
+    font = get_setting(path, 'Settings', 'font')
+    font_size = get_setting(path, 'Settings', 'font_size')
+
+    update_setting(path, "Settings", "font_size", "12")
+
+    delete_setting(path, "Settings", "font_style")
+```
+Agora ao invés de termos toda logica em uma função, nós a separamos em várias funções e então demonstramos sua funcionalidade na instrução if.
+
+- __Como usar a interpolação__
+
+O módulo de configparser também permite __interpolação__, o que significa que podemos __usar__ algumas __opções__ para __construir outra opção__. Fazemos isso com a opção __font_info__, pois seu valor é baseado nas opções __font e font_size__. Além disso, podemos __alterar um valor interpolado__ usando um __dicionário__. Vejamos o exemplo a seguir:
+```py
+import configparser
+import os
+
+def interpolationDemo(path):
+    if not os.path.exists(path):
+        createConfig(path)
+
+    config = configparser.ConfigParser()
+    config.read(path)
+
+    print(config.get("Settings", "font_info"))
+
+    print(config.get("Settings", "font_info",
+                     vars={"font": "Arial", "font_size": "100"}))
+
+
+if __name__ == "__main__":
+    path = "settings.ini"
+    interpolationDemo(path)
+```
+Saída do código:
+```
+You are using Courier at 12 pt
+You are using Arial at 100 pt
+```

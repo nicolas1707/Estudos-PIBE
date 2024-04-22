@@ -1204,3 +1204,127 @@ Saída do código:
 You are using Courier at 12 pt
 You are using Arial at 100 pt
 ```
+
+### 15) Capítulo 15 - Registro (logs)
+
+Python fornece uma biblioteca de __"log"__ em sua biblioteca padrão. Nesta seção, veremos como criar e usar logs para aplicativos e programas.
+
+- __Criando um registrador simples__
+
+Criar um log com o __módulo de registro__ é fácil e pode ser feito da seguinte forma:
+```py
+import logging
+
+# adicione filemode="w" para substituir 
+logging.basicConfig(filename="sample.log", level=logging.INFO)
+
+logging.debug("This is a debug message")
+logging.info("Informational message")
+logging.error("An error has happened!")
+```
+Para acessarmos o módulo de registro devemos primeiramente importá-lo. Com isso, a maneira mais fácil de criar um log é usando a função __basicConfig__ do módulo de log e passar alguns argumentos de palavras-chave. Como __nome do arquivo, modo de arquivo, formato, datafmt, nível e fluxo__. Em nosso exemplo, passamos um nome de arquivo e o nível de registro que definimos como __INFO__. Existem cinco níveis de registro (em ordem crescente): __DEBUG, INFO, WARNING, ERROR e CRITICAL__. Se preferirmos que nosso registro substitua o log, passamos o parametro __filemode="w"__. Vejamos agora o que temos quando executamos:
+```
+INFO:root:Informational message
+ERROR:root:An error has happened!
+```
+Podemos observar que a mensagem de depuração não está na saída, isso ocorre porque definimos o nível como INFO, então nosso logger só registrará se for uma mensagem INFO, WARNING, ERROR ou CRITICAL (DEBUG não aparece pois vem antes na ordem). A parte "root" significa apenas que esta mensagem de registro vem do "registro principal". Se não usarmos __basicConfig__, o módulo de log será enviado para o console.
+
+O módulo de registro também pode registrar exceções no arquivo, como por exemplo no código a seguir:
+```py
+import logging
+
+logging.basicConfig(filename="sample.log", level=logging.INFO)
+log = logging.getLogger("ex")
+
+try:
+    raise RuntimeError
+except RuntimeError:
+    log.exception("Error!")
+```
+Aqui usamos o método __getLogger__ do __módulo de registro__ para retornar um objeto de registro que foi nomeado como __ex__. Isso é útil quando temos vários registradores em um aplicativo, pois permite __identificar quais mensagens vieram de cada registrador__. Este exemplo forçará o surgimento de um __RuntimeError__, __capturando o erro__ e __registrando todo o rastreamento__ no arquivo.
+
+- __Como fazer logon de vários múdlos + formatação__
+
+Quanto mais codificamos, mais acabamos criando um conjunto de módulos personalizados que funcionam juntos. Primeiramente vejamos uma maneira simplificada de realizar isso:
+```py
+import logging
+import otherMod
+
+def main():
+    """
+    O ponto de entrada principal do aplicativo 
+    """
+    logging.basicConfig(filename="mySnake.log", level=logging.INFO)
+    logging.info("Program started")
+    result = otherMod.add(7, 8)
+    logging.info("Done!")
+
+if __name__ == "__main__":
+    main()
+```
+Aqui __importamos__ o log e um módulo de nossa própria criação __"otherMod"__. Então criamos nosso arquivo de log (como feito anteriormente):
+```py
+# otherMod.py
+import logging
+
+def add(x, y):
+    """"""
+    logging.info("added %s and %s to get %s" % (x, y, x+y))
+    return x+y
+```
+Se executarmos o código principal, veremos um log com o seguinte conteúdo:
+```
+INFO:root:Program started
+INFO:root:added 7 and 8 to get 15
+INFO:root:Done!
+```
+O problema de fazer desta maneira é que não podemos dizer facilmente __de onde vêm as mensagens de log__. Então precisaremos de uma maneira mais complexa, porém mais __personalizável__ de fazer isso:
+```py
+import logging
+import otherMod2
+
+def main():
+    """
+    O principal ponto de entrada do aplicativo 
+    """
+    logger = logging.getLogger("exampleApp")
+    logger.setLevel(logging.INFO)
+
+# cria o manipulador do arquivo
+    fh = logging.FileHandler("new_snake.log")
+
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    fh.setFormatter(formatter)
+
+    # adiciona o manipulador ao logger do objeto
+    logger.addHandler(fh)
+
+    logger.info("Program started")
+    result = otherMod2.add(7, 8)
+    logger.info("Done!")
+
+if __name__ == "__main__":
+    main()
+```
+Aqui criamos uma instância do logger chamada __"exampleApp__, definimos seu nível de registro, criamos um objeto manipulador de arquivo de registro e um objeto formatador de registro. O __manipulador de arquivo__ deve definir o objeto formatador como __seu formatador__ e, em seguida, o manipulador de arquivo deve ser __adicionado à instância do criador de logs__. E aqui está o código para __otherMod2__ atualizado:
+```py
+# otherMod2.py
+import logging
+
+module_logger = logging.getLogger("exampleApp.otherMod2")
+
+def add(x, y):
+    """"""
+    logger = logging.getLogger("exampleApp.otherMod2.add")
+    logger.info("added %s and %s to get %s" % (x, y, x+y))
+    return x+y
+```
+Observamos que aqui temos dois loggers definidos. Não fazemos nada com __module_logger__ nesse caso, mas usamos o outro.
+
+Se executarmos o script principal, obteremos isso:
+```
+2012-08-02 15:37:40,592 - exampleApp - INFO - Program started
+2012-08-02 15:37:40,592 - exampleApp.otherMod2.add - INFO - added 7 and 8 to get 15
+2012-08-02 15:37:40,592 - exampleApp - INFO - Done!
+```
+Podemos notar que todas as referências à __raiz__ foram __removidas__, em vez disso, usamos nosso objeto __Formatter__, que diz que devemos obter um __tempo__ legível por humanos, o __nome__ do registrador, o __nível__ de registro e depois a __mensagem__. Eles são conhecidos como atributos __LogRecord__, e para obtermos uma lista completa dos atributos podemos acessar o link: https://docs.python.org/3/library/logging.html#logrecord-attributes.

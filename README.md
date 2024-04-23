@@ -838,7 +838,7 @@ Anteriormente, mesmo que não tenha sido especificado foi subclassificado __obje
 ```py
 class Car(Vehicle):
     """
-    The Car class
+    A classe do Carro
     """
 
     def brake(self):
@@ -932,7 +932,7 @@ import csv
 
 def csv_dict_reader(file_obj):
     """
-    Read a CSV file using csv.DictReader
+    Lê um arquivo CSV usando csv.DictReader
     """
     reader = csv.DictReader(file_obj, delimiter=',')
     for line in reader:
@@ -953,7 +953,7 @@ import csv
 
 def csv_writer(data, path):
     """
-    Write data to a CSV file path
+    Grava dados em um caminho de arquivo CSV
     """
     with open(path, "w", newline='') as csv_file:
         writer = csv.writer(csv_file, delimiter=',')
@@ -1037,7 +1037,7 @@ import configparser
 
 def createConfig(path):
     """
-    Create a config file
+    Cria um arquivo de configuração
     """
     config = configparser.ConfigParser()
     config.add_section("Settings")
@@ -1066,7 +1066,7 @@ import os
 
 def crudConfig(path):
     """
-    Create, read, update, delete config
+    Criar, ler, atualizar, e deletar configurações
     """
     if not os.path.exists(path):
         createConfig(path)

@@ -1328,3 +1328,138 @@ Se executarmos o script principal, obteremos isso:
 2012-08-02 15:37:40,592 - exampleApp - INFO - Done!
 ```
 Podemos notar que todas as referências à __raiz__ foram __removidas__, em vez disso, usamos nosso objeto __Formatter__, que diz que devemos obter um __tempo__ legível por humanos, o __nome__ do registrador, o __nível__ de registro e depois a __mensagem__. Eles são conhecidos como atributos __LogRecord__, e para obtermos uma lista completa dos atributos podemos acessar o link: https://docs.python.org/3/library/logging.html#logrecord-attributes.
+
+
+### 16) Capítulo 16 - O módulo OS
+
+O módulo __os__ tem muitas utilizações importantes no Python, e antes de conhecermos algumas destas utilizações precisamos usar o comando `import os`.
+
+- __os.name__
+
+O módulo os possuí __funções__ que podem ser chamadas, e também possuí valores normais. No caso de __os.name__, será apenas um valor, e ao acessar os.name, obteremos __informações sobre a plataforma que estamos executando__. No caso, será enviado para nós algum dos seguintes valores: __'posix'__, __'nt'__, __'os2'__, __'ce'__, __'java'__, __'riscos'__. Por exemplo, se executarmos este comando no Windows 7, receberemos um __'nt'__, pois nt é como a Microsoft chama seu sistema operacional.
+
+- __os.enviro, os.getenv() e os.putenv()__
+
+O valor __os.environ__ é conhecido como objeto de __mapeamento__ que retorna um __dicionário das variáveis ambientais do usuário__. Estas variáveis aparecem e são definidas toda vez que usamos nosso computador, elas podem fornecer informações valiosas, como número de processadores, tipo de CPU, nome do computador, etc.
+
+Como este comando retorna um dicionário, isso significa que podemos acessar nossas variáveis ambientais usando os métodos de chamada do dicionário. Como por exemplo, caso quisessemos identificar a pasta "temp" usariamos:
+```py
+>>> print(os.environ["TMP"])
+'C:\\Users\\mike\\AppData\\Local\\Temp'
+´´´
+Também podemos usar o comando __os.getenv__ para acessar esta variável ambiental:
+```py
+>>> os.getenv("TMP")
+'C:\\Users\\mike\\AppData\\Local\\Temp'
+```
+O benefício de usar a função os.gentev() em vez do dicionário é que se tentarmos acessar uma variável ambiental que não existe, a função retornará apenas __None__. Se fizessemos a mesma coisa com o dicionário receberiamos um erro.
+
+- __os.chdir() e os.getcwd()__
+
+A função __os.chdir__ nos permite __alterar o diretório__ no qual estamos executando nossa sessão. Se quisermos saber em qual caminho estamos atualmente, chamamos a função __os.getcwd()__. Vejamos um exemplo desta mudança:
+```py
+>>> os.getcwd()
+'C:\\Python27'
+>>> os.chdir(r"c:\Users\mike\Documents")
+>>> os.getcwd()
+'c:\\Users\\mike\\Documents'
+```
+O código acima nos mostra que nós começamos no diretório "Python" por padrão, então, chamamos os.chdir para mudar as pastas para "Documents". E por fim, usamos os.getcwd novamente para verificar se a mudança foi realizada com sucesso.
+
+- __os.mkdir() e os.makedirs()__
+
+Estes dois métodos tem o mesmo propósito de __criar diretórios__. O primeiro é o __os.mkdir()__, que nos permite criar uma única pasta, como uma pasta de teste para entenderemos melhor:
+```py
+>>> os.mkdir("test")
+
+>>> path = r'C:\Users\mike\Documents\pytest'
+>>> os.mkdir(path)
+```
+Explicando o código, primeiramente usamos a função __os.mkdir__ para criar uma pasta chamada __teste__ no diretório atual. O segundo exemplo atribui um caminho a uma variável __path__, e então, passamos o caminho para a função. Isso nos permite criar uma pasta em __qualquer lugar do sistema__ no qual tenhamos permissão.
+
+A função __os.makedirs()__ criará todas as __pastas intermediárias__ em __um caminho__, caso elas ainda não existam. Basicamente, podemos criar um caminho que contenha __pastas aninhadas__. Vejamos um exemplo:
+```py
+>>> path = r'C:\Users\mike\Documents\pytest\2014\02\19'
+>>> os.makedirs(path)
+```
+Caso não tenhamos as pastas indicadas, a função irá criar elas, e no fim teremos múltiplas pastas.
+
+- __os.remove() e os.rmdir()__
+
+As funções __os.remove()__ e __os.rmdir__ são usadas para __excluir arquivos e diretórios__ respectivamente.
+
+- __os.rename(src,dst)__
+
+A função os.rename() pode renomear __pastas ou diretórios__, como por exemplo `>>> os.rename("test.txt", "pytest.txt")`. Neste exemplo, dizemos para a função para renomear o arquivo __test.txt__ para __pytest.txt__. Existe também a função __os.renames__ que renomeia __recursivamente__ um diretório ou arquivo.
+
+- __os.startfile__
+
+O métood __os.startfile()__ nos permite __"iniciar" um arquivo com seu programa associado__. Como quando abrimos um PDF e ele abre no Adobe Reader.
+
+Um exemplo simples disso no código a seguir, é passar um caminho qualificado para a função, que informa para abrir um arquivo chamado __labels.pdf__: `>>> os.startfile(r'C:\Users\mike\Documents\labels.pdf')`.
+
+- __os.walk()__
+
+O método __os.walk()__ nos dá uma maneira de __iterar__ sobre um caminho de __nível raiz__. O que significa que podemos passar um caminho para esta função, e obter acesso a todos os subdiretórios e arquivos.
+
+- __os.path.basename__
+
+A função __basename__ retorna apenas o __nome do arquivo de um caminho__, por exemplo:
+```py
+>>> os.path.basename(r'C:\Python27\Tools\pynche\ChipViewer.py')
+'ChipViewer.py'
+```
+
+- __os.path.dirname__
+
+A função __dirname__ retornará apenas a parte do __diretório do caminho__.
+```py
+>>> os.path.dirname(r'C:\Python27\Tools\pynche\ChipViewer.py')
+'C:\\Python27\\Tools\\pynche'
+```
+
+- __os.path.exists__
+
+A função __exists__ informará se __um caminho existe, ou não__.
+```py
+>>> os.path.exists(r'C:\Python27\Tools\pynche\ChipViewer.py')
+True
+>>> os.path.exists(r'C:\Python27\Tools\pynche\fake.py')
+False
+```
+
+- __os.path.isdir - os.path.isfile__
+
+Os métodos __isdir e isfile__ estão relacionados ao método __exists__, pois também testam a existência. Porém, __isdir__ testa se um __caminho é um diretório__, e __isfile__ verifica se um __caminho é um arquivo__.
+```py
+>>> os.path.isfile(r'C:\Python27\Tools\pynche\ChipViewer.py')
+True
+>>> os.path.isdir(r'C:\Python27\Tools\pynche\ChipViewer.py')
+False
+>>> os.path.isdir(r'C:\Python27\Tools\pynche')
+True
+>>> os.path.isfile(r'C:\Python27\Tools\pynche')
+False
+```
+No caso, temos __pynche__ como um __diretório__ de ChipViewer.py, e __ChipViewer.py__ como um __arquivo__ de pynche.
+
+- __os.path.join__
+
+O método __join__ oferece a capacidade de __unir um ou mais componentes do caminho__ usando o separador apropriado. Por exemplo, no Windows o separador é a barra inversa, no Linux, o separador é a barra.
+```py
+>>> os.path.join(r'C:\Python27\Tools\pynche', 'ChipViewer.py')
+'C:\\Python27\\Tools\\pynche\\ChipViewer.py'
+```
+Neste exemplo, unimos um caminho de diretório e um caminho de arquivo para obter um caminho totalmente qualificado.
+
+- __os.path.split__
+
+O método __split__ dividirá um caminho em uma __tupla__ que contém o __diretório e o arquivo__. Vejamos um exemplo super comum do uso do split:
+```py
+>>> dirname, fname = os.path.split(r'C:\Python27\Tools\pynche\ChipViewer.py')
+>>> dirname
+'C:\\Python27\\Tools\\pynche'
+>>> fname
+'ChipViewer.py'
+```
+Quando dividimos o caminho, ele retorna uma tupla de dois elementos. Como temos duas variáveis, o primeiro elemento é atribuído à primeira variável e o segundo à segunda variável.

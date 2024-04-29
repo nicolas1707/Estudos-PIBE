@@ -1463,3 +1463,113 @@ O método __split__ dividirá um caminho em uma __tupla__ que contém o __diret�
 'ChipViewer.py'
 ```
 Quando dividimos o caminho, ele retorna uma tupla de dois elementos. Como temos duas variáveis, o primeiro elemento é atribuído à primeira variável e o segundo à segunda variável.
+
+
+### 17) Capítulo 17 - O módulo email/smtplib
+
+O Python fornece alguns módulos que podemos usar para criar e-mails, estes são os módulos __email e smtplib__.
+
+- __Como enviar um e-mail com smtplib__
+
+Vamos escrever um exemplo rápido que mostra como enviar um email. Para isso, salvaremos o seguinte código em um arquivo no diretório:
+```
+import smtplib
+
+HOST = "mySMTP.server.com"
+SUBJECT = "Test email from Python"
+TO = "mike@someAddress.org"
+FROM = "python@mydomain.com"
+text = "Python 3.4 rules them all!"
+
+BODY = "\r\n".join((
+    "From: %s" % FROM,
+    "To: %s" % TO,
+    "Subject: %s" % SUBJECT ,
+    "",
+    text
+    ))
+
+server = smtplib.SMTP(HOST)
+server.sendmail(FROM, [TO], BODY)
+server.quit()
+```
+Neste código importamos dois módulos, __smtplib__ e o módulo __string__. Dois terços deste código são usados para configurar o email. Primeiramente vamos nos concentrar na variável ímpar chamada __BODY__. Aqui usamos o módulo __string__ para __combinar__ todas as __variáveis__ anteriores em uma __única string__ onde cada linha termina com /r mais uma nova linha com /n. Se imprimirmos `>>>print(BODY)`, ficaria assim: `'From: python@mydomain.com\r\nTo: mike@mydomain.com\r\nSubject: Test email from Python\r\n\r\nblah blah blah'`.
+
+Após isso, configuramos uma conexão de servidor com o host e então chamamos o método __sendmail__ do outro módulo para enviar o e-mail, depois, nos desconectamos do servidor. Podemos notar que este código não contém um __usuário ou senha__, caso o servidor exigir autenticação, precisamo adicionar a seguinte linha ao código: `server.login(username, password)`
+
+Isso deve ser __adicionado logo após a criação do objeto servidor__. Vejamos agora este código implementado em uma função:
+```py
+import smtplib
+
+def send_email(host, subject, to_addr, from_addr, body_text):
+    """
+    Envia um e-mail
+    """
+    BODY = "\r\n".join((
+            "From: %s" % from_addr,
+            "To: %s" % to_addr,
+            "Subject: %s" % subject ,
+            "",
+            body_text
+            ))
+    server = smtplib.SMTP(host)
+    server.sendmail(from_addr, [to_addr], BODY)
+    server.quit()
+
+if __name__ == "__main__":
+    host = "mySMTP.server.com"
+    subject = "Test email from Python"
+    to_addr = "mike@someAddress.org"
+    from_addr = "python@mydomain.com"
+    body_text = "Python rules them all!"
+    send_email(host, subject, to_addr, from_addr, body_text)
+```
+Agora adicionaremos um __arquivo de configuração__ para armazenar as __informações do servidor__ e o __endereço de origem__, para que facilite quando formos mudar algo no arquivo sem ter que mudar o código. Vamos dar uma olhada neste arquivo de configuração:
+```
+[smtp]
+server = some.server.com
+from_addr = python@mydomain.com
+```
+Esse é um arquivo de configuração bem simples. Nele temos uma seção chamada __smtp__ na qual temos dois itens: __server__ e __from_addr__. Usaremos __configObj__ para ler este arquivo e transformá-lo em um dicionário Python. Salvaremos então, esta versão atualizada do código (smtp_config.py):
+```py
+import os
+import smtplib
+import sys
+
+from configparser import ConfigParser
+
+def send_email(subject, to_addr, body_text):
+    """
+    Envia o e-mail
+    """
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    config_path = os.path.join(base_path, "email.ini")
+
+    if os.path.exists(config_path):
+        cfg = ConfigParser()
+        cfg.read(config_path)
+    else:
+        print("Config not found! Exiting!")
+        sys.exit(1)
+
+    host = cfg.get("smtp", "server")
+    from_addr = cfg.get("smtp", "from_addr")
+
+    BODY = "\r\n".join((
+        "From: %s" % from_addr,
+        "To: %s" % to_addr,
+        "Subject: %s" % subject ,
+        "",
+        body_text
+    ))
+    server = smtplib.SMTP(host)
+    server.sendmail(from_addr, [to_addr], BODY)
+    server.quit()
+
+if __name__ == "__main__":
+    subject = "Test email from Python"
+    to_addr = "mike@someAddress.org"
+    body_text = "Python rules them all!"
+    send_email(subject, to_addr, body_text)
+```
+Primeiro, queremos pegar o caminho em que o script está, que é o que __base_path__ representa. Em seguida, combinamos este caminho com o nome do arquivo para obter um caminho qualificado para o arquivo de config. Logo após, verificamos a existência desse arquivo, se estiver lá, criamos um __ConfigParser__, e se não estiver, imprimimos uma mensagem e saímos do script. Devemos adicionar um __manipulador de exceção__ em torno da chamada __ConfigParser.read()__ apenas para garantir a segurança, pois o arquivo pode existir mas estar corrompido ou podemos não ter permissão para abri-lo, e isso gerará uma exceção. Caso ConfigParser seja criado com sucesso, podemos extrair __informações de host e from_addr__ usando a sintaxe usual.

@@ -1471,7 +1471,7 @@ O Python fornece alguns módulos que podemos usar para criar e-mails, estes são
 
 - __Como enviar um e-mail com smtplib__
 
-Vamos escrever um exemplo rápido que mostra como enviar um email. Para isso, salvaremos o seguinte código em um arquivo no diretório:
+Vamos escrever um exemplo rápido que mostra como enviar um e-mail. Para isso, salvaremos o seguinte código em um arquivo no diretório:
 ```
 import smtplib
 
@@ -1573,3 +1573,204 @@ if __name__ == "__main__":
     send_email(subject, to_addr, body_text)
 ```
 Primeiro, queremos pegar o caminho em que o script está, que é o que __base_path__ representa. Em seguida, combinamos este caminho com o nome do arquivo para obter um caminho qualificado para o arquivo de config. Logo após, verificamos a existência desse arquivo, se estiver lá, criamos um __ConfigParser__, e se não estiver, imprimimos uma mensagem e saímos do script. Devemos adicionar um __manipulador de exceção__ em torno da chamada __ConfigParser.read()__ apenas para garantir a segurança, pois o arquivo pode existir mas estar corrompido ou podemos não ter permissão para abri-lo, e isso gerará uma exceção. Caso ConfigParser seja criado com sucesso, podemos extrair __informações de host e from_addr__ usando a sintaxe usual.
+
+- __Enviando vários e-mails de uma vez__
+
+Para enviar vários e-mails, teremos que modificar um pouco o código, como a seguir:
+```py
+import os
+import smtplib
+import sys
+
+from configparser import ConfigParser
+
+def send_email(subject, body_text, emails):
+    """
+    Envia um e-mail
+    """
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    config_path = os.path.join(base_path, "email.ini")
+
+    if os.path.exists(config_path):
+        cfg = ConfigParser()
+        cfg.read(config_path)
+    else:
+        print("Config not found! Exiting!")
+        sys.exit(1)
+
+    host = cfg.get("smtp", "server")
+    from_addr = cfg.get("smtp", "from_addr")
+
+    BODY = "\r\n".join((
+            "From: %s" % from_addr,
+            "To: %s" % ', '.join(emails),
+            "Subject: %s" % subject ,
+            "",
+            body_text
+            ))
+    server = smtplib.SMTP(host)
+    server.sendmail(from_addr, emails, BODY)
+    server.quit()
+
+if __name__ == "__main__":
+    emails = ["mike@someAddress.org", "someone@gmail.com"]
+    subject = "Test email from Python"
+    body_text = "Python rules them all!"
+    send_email(subject, body_text, emails)
+```
+Neste exemplo removemos o parâmetro __to_addr__ e adicionamos um parâmetro __emails__, que será uma __lista de endereços de e-mail__. Para fazer isso, precisamos criar uma string separada por vírgula na parte __To:__ do BODY, e também passar a lista de e-mails para o método __sendmail__. Assim, usamos a seguinte syntaxe para criar a string separada por vírgula: `join(emails)`.
+
+- __Enviar e-mails usando as linhas TO,CC e BCC__
+
+Iremos ver agora como enviar usando os campos CC e BCC. Primeiramente teremos que novamente atualizar o código:
+```py
+import os
+import smtplib
+import sys
+
+from configparser import ConfigParser
+
+def send_email(subject, body_text, to_emails, cc_emails, bcc_emails):
+    """
+    Send an email
+    """
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    config_path = os.path.join(base_path, "email.ini")
+
+    if os.path.exists(config_path):
+        cfg = ConfigParser()
+        cfg.read(config_path)
+    else:
+        print("Config not found! Exiting!")
+        sys.exit(1)
+
+    host = cfg.get("smtp", "server")
+    from_addr = cfg.get("smtp", "from_addr")
+
+    BODY = "\r\n".join((
+            "From: %s" % from_addr,
+            "To: %s" % ', '.join(to_emails),
+            "CC: %s" % ', '.join(cc_emails),
+            "BCC: %s" % ', '.join(bcc_emails),
+            "Subject: %s" % subject ,
+            "",
+            body_text
+            ))
+    emails = to_emails + cc_emails + bcc_emails
+
+    server = smtplib.SMTP(host)
+    server.sendmail(from_addr, emails, BODY)
+    server.quit()
+
+if __name__ == "__main__":
+    emails = ["mike@somewhere.org"]
+    cc_emails = ["someone@gmail.com"]
+    bcc_emails = ["schmuck@newtel.net"]
+
+    subject = "Test email from Python"
+    body_text = "Python rules them all!"
+    send_email(subject, body_text, emails, cc_emails, bcc_emails)
+```
+Neste código passamos 3 listas, cada uma com um endereço de e-mail. Criamos os campos CC e BCC exatamente como antes, mas também combinamos as __3 listas em uma__ para que possamos passar ela para o método __sendmail()__.
+
+- __Adicione um anexo/corpo usando o módulo de e-mail__
+
+Agora pegaremos tudo que aprendemos até agora e combinar com o __módulo de e-mail__ do Python para que possamos enviar anexos. O módulo de e-mail torna a adição desses anexos extremamente fácil. Vejamos o código:
+```py
+import os
+import smtplib
+import sys
+
+from configparser import ConfigParser
+from email import encoders
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email.mime.multipart import MIMEMultipart
+from email.utils import formatdate
+
+#----------------------------------------------------------------------
+def send_email_with_attachment(subject, body_text, to_emails,
+                               cc_emails, bcc_emails, file_to_attach):
+    """
+    Envie um e-mail com anexo
+    """
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    config_path = os.path.join(base_path, "email.ini")
+    header = 'Content-Disposition', 'attachment; filename="%s"' % file_to_attach
+
+    # get the config
+    if os.path.exists(config_path):
+        cfg = ConfigParser()
+        cfg.read(config_path)
+    else:
+        print("Config not found! Exiting!")
+        sys.exit(1)
+
+    # extract server and from_addr from config
+    host = cfg.get("smtp", "server")
+    from_addr = cfg.get("smtp", "from_addr")
+
+    # create the message
+    msg = MIMEMultipart()
+    msg["From"] = from_addr
+    msg["Subject"] = subject
+    msg["Date"] = formatdate(localtime=True)
+    if body_text:
+        msg.attach( MIMEText(body_text) )
+
+    msg["To"] = ', '.join(to_emails)
+    msg["cc"] = ', '.join(cc_emails)
+
+    attachment = MIMEBase('application', "octet-stream")
+    try:
+        with open(file_to_attach, "rb") as fh:
+            data = fh.read()
+        attachment.set_payload( data )
+        encoders.encode_base64(attachment)
+        attachment.add_header(*header)
+        msg.attach(attachment)
+    except IOError:
+        msg = "Error opening attachment file %s" % file_to_attach
+        print(msg)
+        sys.exit(1)
+
+    emails = to_emails + cc_emails
+
+    server = smtplib.SMTP(host)
+    server.sendmail(from_addr, emails, msg.as_string())
+    server.quit()
+
+if __name__ == "__main__":
+    emails = ["mike@someAddress.org", "nedry@jp.net"]
+    cc_emails = ["someone@gmail.com"]
+    bcc_emails = ["anonymous@circe.org"]
+
+    subject = "Test email with attachment from Python"
+    body_text = "This email contains an attachment!"
+    path = "/path/to/some/file"
+    send_email_with_attachment(subject, body_text, emails,
+                               cc_emails, bcc_emails, path)
+```
+Para este último exemplo renomeamos nossa função e adicionamos um novo argumento: __file_to_attach__. Também precisamos adicionar um cabeçalho e criar um objeto: __MIMEMultipart__, e adicionamos elementos a este objeto, como faríamos com as chaves de um dicionário. Podemos notar que precisamos usar o método __formdate__ deste módulo para __inserir a data formatada__ corretamente. Para adicionar o corpo da mensagem, precisamos criar uma instância de __MIMEText__. Em seguida, adicionamos o anexo, que foi envolvido em um manipulador de exceções e usamos a instrução __with__ para extrair o arquivo e colocá-lo em nosso objeto. Finalmente, adicionamos a variável __msg__ e enviamos. Devemos notar também que neste caso convertemos a __mensagem__ em uma __string__ no método sendmail.
+
+
+### 18) Capítulo 18 - O Módulo sqlite
+
+__SQLite__ é um mecanismo de banco de dados SQL transacional independente, sem servidor e configuração. Se quisermos inspecionar seu banco de dados visualmente, podemos usar o plugin __SQLite Manager__ para Firefox, ou usar o shell de linha de comando do SQLite.
+
+- __Como criar um banco de dados e inserir dados__
+
+Criar um banco de dados em SQLite é muito fácil, mas o processo requer que conheçamos um pouco de SQL para fazê-lo. Aqui está um código que criará um banco de dados para armazenar álbuns de músicas:
+```py
+import sqlite3
+
+conn = sqlite3.connect("mydatabase.db") # or use :memory: to put it in RAM
+
+cursor = conn.cursor()
+
+# create a table
+cursor.execute("""CREATE TABLE albums
+                  (title text, artist text, release_date text,
+                   publisher text, media_type text)
+               """)
+```

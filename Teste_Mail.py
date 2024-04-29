@@ -2,6 +2,7 @@ import os
 import smtplib
 import sys
 
+ print(oi)
 from configparser import ConfigParser
 
 def send_email(subject, to_addr, body_text):
@@ -37,3 +38,4 @@ if __name__ == "__main__":
     to_addr = "mike@someAddress.org"
     body_text = "Python rules them all!"
     send_email(subject, to_addr, body_text)
+

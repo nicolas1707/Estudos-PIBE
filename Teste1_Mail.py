@@ -1,7 +1,7 @@
 import smtplib
 from arquivo import user, passw
 
-HOST = "smtp.ufsc.br"
+HOST = "smtp.ufsc.br" #Servidor da UFSC
 SUBJECT = "Test email from Python"
 TO = "nicolas.grad.ufsc@gmail.com"
 FROM = "nicolas.santos1707@gmail.com"

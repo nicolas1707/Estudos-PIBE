@@ -1472,7 +1472,7 @@ O Python fornece alguns módulos que podemos usar para criar e-mails, estes são
 - __Como enviar um e-mail com smtplib__
 
 Vamos escrever um exemplo rápido que mostra como enviar um e-mail. Para isso, salvaremos o seguinte código em um arquivo no diretório:
-```
+```py
 import smtplib
 
 HOST = "mySMTP.server.com"

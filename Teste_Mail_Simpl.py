@@ -1,9 +1,10 @@
 import smtplib
+from arquivo import user, passw
 
-HOST = "mySMTP.server.com"
+HOST = "smtp.ufsc.br"
 SUBJECT = "Test email from Python"
-TO = "mike@someAddress.org"
-FROM = "python@mydomain.com"
+TO = "nicolas.grad.ufsc@gmail.com"
+FROM = "nicolas.santos1707@gmail.com"
 text = "Python 3.4 rules them all!"
 
 BODY = "\r\n".join((
@@ -15,5 +16,6 @@ BODY = "\r\n".join((
     ))
 
 server = smtplib.SMTP(HOST)
+server.login(user, passw)
 server.sendmail(FROM, [TO], BODY)
 server.quit()

@@ -2,7 +2,6 @@ import os
 import smtplib
 import sys
 
- print(oi)
 from configparser import ConfigParser
 
 def send_email(subject, to_addr, body_text):

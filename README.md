@@ -3,7 +3,7 @@
 
  Link para ínicio dos estudos: [python 101](https://python101.pythonlibrary.org/)
 
-Guia: Criar um resumo para cada capítulo e testar os comandos do tutorial diretamente no terminal do vscode (comando `python3` para iniciar). -> Para acessar, usamos CTRL+SHIFT+P e buscamos Create New Terminal
+Guia: Criar um resumo para cada capítulo e testar os comandos do tutorial diretamente no terminal do vscode (comando `python3` para iniciar o terminal do python, e utilizar o comando `CTRL+D` para voltar ao terminal normal). -> Para acessar, usamos CTRL+SHIFT+P e buscamos Create New Terminal
 
 Notas: Se quisermos verificar algum teste no compilador, igual fazemos nas linhas de comando, usamos print("comando") caso este comando apareça alguma mensagem feita pelo python. No python, sempre que formos fazer uma estrutura de programa nas linhas de comando, devemos respeitar os __espaçamentos__ dados pela tecla __TAB__.
 
@@ -1774,3 +1774,93 @@ cursor.execute("""CREATE TABLE albums
                    publisher text, media_type text)
                """)
 ```
+Primeiro __importamos o módulo sqlite3__ e criamos uma conexão com o banco de dados. Podemos também passar um caminho ou nome de arquivo, ou apenas usar a string especial __":memory:"__ para criar o banco de dados na memória. No nosso caso, criamos um disco em um arquivo chamado __mydatabase.db__. A seguir criamos um __objeto cursor__ que permite __interagir com o banco de dados__ e __adicionar registros__, entre outras coisas. Usamos também a sintaxe SQL para criar uma __tabela__ chamada álbuns com 5 campos de texto. O SQLite suporta apenas cinco tipos de dados: __nulo, inteiro, real, texto e blob__. Iremos agora desenvolver um código para inserir alguns dados em nossa nova tabela.
+
+Primeiro __importamos o módulo sqlite3__ e criamos uma conexão com o banco de dados. Podemos também passar um caminho ou nome de arquivo, ou apenas usar a string especial __":memory:"__ para criar o banco de dados na memória. No nosso caso, criamos um disco em um arquivo chamado mydatabase.db. A seguir criamos um objeto cursor que permite interagir com o banco de dados e adicionar registros, entre outras coisas. Usamos também a sintaxe SQL para criar uma tabela chamada álbuns com 5 campos de texto. O SQLite suporta apenas cinco tipos de dados: nulo, inteiro, real, texto e blob. Agora desenvolveremos um código para inserir alguns dados em nossa nova tabela.
+```py
+import sqlite3
+
+conn = sqlite3.connect("mydatabase.db") # or use :memory: to put it in RAM
+
+cursor = conn.cursor()
+
+# insere dados
+cursor.execute("""INSERT INTO albums
+                  VALUES ('Glow', 'Andy Hunter', '7/24/2012',
+                          'Xplore Records', 'MP3')"""
+               )
+
+# salva no banco de dados
+conn.commit()
+
+# insere vários registros usando um método mais seguro
+albums = [('Exodus', 'Andy Hunter', '7/9/2002', 'Sparrow Records', 'CD'),
+          ('Until We Have Faces', 'Red', '2/1/2011', 'Essential Records', 'CD'),
+          ('The End is Where We Begin', 'Thousand Foot Krutch', '4/17/2012', 'TFKmusic', 'CD'),
+          ('The Good Life', 'Trip Lee', '4/10/2012', 'Reach Records', 'CD')]
+cursor.executemany("INSERT INTO albums VALUES (?,?,?,?,?)", albums)
+conn.commit()
+```
+Aqui usamos o comando __INSERT INTO SQL__ para __inserir um registro__ em nosso banco de dados. E, logo a seguir, o código nos mostra como adicionar vários registros de uma vez usando o método __executemany__ do cursor. Podemos observar que estamos usando _?_ ao invés de substituição de strings _%s_ para inserir os valores. Isso ocorre porque usar a substituição de string __não é seguro__ e não deve ser usado, pois pode permitir a ocorrência de ataques de injeção de SQL.
+
+- __Atualizando e excluindo Registros__
+
+Para aprendermos como atualizar e excluir registros, iremos primeiramente fazer uma atualização.
+```py
+import sqlite3
+
+conn = sqlite3.connect("mydatabase.db")
+cursor = conn.cursor()
+
+sql = """
+UPDATE albums
+SET artist = 'Nicolas'
+WHERE artist = 'John Doe'
+"""
+cursor.execute(sql)
+conn.commit()
+```
+Aqui usamos o comando __UPDATE__ do SQL para indicar qual tabela queremos atualizar, usamos __SET + O campo que queremos alterar__ e atribuímos qual a nova mudança que aparecerá, e por fim, utilizamos __WHERE + O campo que queremos alterar__ atribuído ao que está escrito e será mudado.
+
+Para __deletar__ elementos também é muito fácil:
+```py
+import sqlite3
+
+conn = sqlite3.connect("mydatabase.db")
+cursor = conn.cursor()
+
+sql = """
+DELETE FROM albums
+WHERE artist = 'John Doe'
+"""
+cursor.execute(sql)
+conn.commit()
+```
+Para realizar esta operação, precisamos apenas de 2 comandos, o __DELETE FROM__ para indicar de qual tabela vamos deletar algo, e o __WHERE__ já visto anteriormente.
+
+- __Consultas SQLite básicas__
+
+As consultas no SQLite são praticamente as mesmas que usamos em outros bancos de dados. Aqui estão alguns exempĺos:
+```py
+conn = sqlite3.connect("mydatabase.db")
+#conn.row_factory = sqlite3.Row
+cursor = conn.cursor()
+
+sql = "SELECT * FROM albums WHERE artist=?" #Consulta
+cursor.execute(sql, [("Trip Lee")]) #Nome para busca
+print(cursor.fetchall()) 
+
+print("\nHere's a listing of all the records in the table:\n") #Listagem
+for row in cursor.execute("SELECT rowid, * FROM albums ORDER BY artist"): 
+    print(row)
+
+print("\nResults from a LIKE query:\n") 
+sql = """
+SELECT * FROM albums
+WHERE title LIKE 'The%'""" #Faz a consulta para um caractere específico usando caractere% no qual todos elementos que tiverem este começo serão listados
+#Para o final, basta usar %caractere
+#Para ambos os lados, basta usar %caractere%
+cursor.execute(sql)
+print(cursor.fetchall())
+```
+Neste exemplo, temos 3 tipos de busca. O primeiro, selecionamos __diretamente__ a informação que queremos buscar. No segundo, o algoritmo executa uma __listagem__ de todos elementos presentes no banco (rowid), ordenando os resultados pelo nome do artista em ordem crescente utilizando o comando __ORDER BY__. E por fim, no terceiro fazemos __buscas por caractéres específicos__.

@@ -1774,9 +1774,7 @@ cursor.execute("""CREATE TABLE albums
                    publisher text, media_type text)
                """)
 ```
-Primeiro __importamos o módulo sqlite3__ e criamos uma conexão com o banco de dados. Podemos também passar um caminho ou nome de arquivo, ou apenas usar a string especial __":memory:"__ para criar o banco de dados na memória. No nosso caso, criamos um disco em um arquivo chamado __mydatabase.db__. A seguir criamos um __objeto cursor__ que permite __interagir com o banco de dados__ e __adicionar registros__, entre outras coisas. Usamos também a sintaxe SQL para criar uma __tabela__ chamada álbuns com 5 campos de texto. O SQLite suporta apenas cinco tipos de dados: __nulo, inteiro, real, texto e blob__. Iremos agora desenvolver um código para inserir alguns dados em nossa nova tabela.
-
-Primeiro __importamos o módulo sqlite3__ e criamos uma conexão com o banco de dados. Podemos também passar um caminho ou nome de arquivo, ou apenas usar a string especial __":memory:"__ para criar o banco de dados na memória. No nosso caso, criamos um disco em um arquivo chamado mydatabase.db. A seguir criamos um objeto cursor que permite interagir com o banco de dados e adicionar registros, entre outras coisas. Usamos também a sintaxe SQL para criar uma tabela chamada álbuns com 5 campos de texto. O SQLite suporta apenas cinco tipos de dados: nulo, inteiro, real, texto e blob. Agora desenvolveremos um código para inserir alguns dados em nossa nova tabela.
+Primeiro __importamos o módulo sqlite3__ e criamos uma conexão com o banco de dados. Podemos também passar um caminho ou nome de arquivo, ou apenas usar a string especial __":memory:"__ para criar o banco de dados na memória. No nosso caso, criamos um disco em um arquivo chamado __mydatabase.db__. A seguir criamos um __objeto cursor__ que permite __interagir com o banco de dados__ e __adicionar registros__, entre outras coisas. Usamos também a sintaxe SQL para criar uma __tabela__ chamada álbuns com 5 campos de texto. O SQLite suporta apenas cinco tipos de dados: __nulo, inteiro, real, texto e blob__. Agora desenvolveremos um código para inserir alguns dados em nossa nova tabela.
 ```py
 import sqlite3
 
@@ -1801,7 +1799,7 @@ albums = [('Exodus', 'Andy Hunter', '7/9/2002', 'Sparrow Records', 'CD'),
 cursor.executemany("INSERT INTO albums VALUES (?,?,?,?,?)", albums)
 conn.commit()
 ```
-Aqui usamos o comando __INSERT INTO SQL__ para __inserir um registro__ em nosso banco de dados. E, logo a seguir, o código nos mostra como adicionar vários registros de uma vez usando o método __executemany__ do cursor. Podemos observar que estamos usando _?_ ao invés de substituição de strings _%s_ para inserir os valores. Isso ocorre porque usar a substituição de string __não é seguro__ e não deve ser usado, pois pode permitir a ocorrência de ataques de injeção de SQL.
+Aqui usamos o comando __INSERT INTO SQL__ para __inserir um registro__ em nosso banco de dados. E, logo a seguir, o código nos mostra como adicionar vários registros de uma vez usando o método executemany do cursor. Podemos observar que estamos usando _?_ ao invés de substituição de strings _%s_ para inserir os valores. Isso ocorre porque usar a substituição de string __não é seguro__ e não deve ser usado, pois pode permitir a ocorrência de ataques de injeção de SQL.
 
 - __Atualizando e excluindo Registros__
 
@@ -1836,7 +1834,7 @@ WHERE artist = 'John Doe'
 cursor.execute(sql)
 conn.commit()
 ```
-Para realizar esta operação, precisamos apenas de 2 comandos, o __DELETE FROM__ para indicar de qual tabela vamos deletar algo, e o __WHERE__ já visto anteriormente.
+Aqui usamos o comando __DELETE FROM__ para indicar de qual tabela vamos deletar algo, e o __WHERE__ já visto anteriormente.
 
 - __Consultas SQLite básicas__
 

@@ -1939,20 +1939,7 @@ print(data)
 ```
 Neste exemplo de código, criamos uma __variável args__ para armazenar uma __lista de argumentos__. Em seguida, redirecionamos a saída padrão (stdout) para nosso subprocesso para que possamos nos comunicar com ele. O próprio método de comunicação nos permite __comunicar com o processo__ que acabamos de gerar. 
 
-Podemos notar que ao executar este código a comunicação aguardará a conclusão do processo e então retornará uma __tupla de dois elementos__ que contém o que estava em __stdout e stderr__. Aqui está o resultado:
-```
-('Pinging ds-any-fp3-real.wa1.b.yahoo.com [98.139.180.149] with 32 bytes of data:
-Reply from 98.139.180.149: bytes=32 time=139ms TTL=45
-Reply from 98.139.180.149: bytes=32 time=162ms TTL=45
-Reply from 98.139.180.149: bytes=32 time=164ms TTL=45
-Reply from 98.139.180.149: bytes=32 time=110ms TTL=45
-Ping statistics for 98.139.180.149:
-Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
-Approximate round trip times in milli-seconds:
-Minimum = 110ms, Maximum = 164ms, Average = 143ms
-', None)
-```
-Podemos também imprimir o resultado em um formato mais legível com o seguinte programa:
+Podemos também imprimir o resultado em um formato mais legível com o seguinte código:
 ```py
 import subprocess
 
@@ -1963,19 +1950,41 @@ data = process.communicate()
 for line in data:
     print(line)
 ```
-Gerando a seguinte saída:
-```
-Pinging ds-any-fp3-real.wa1.b.yahoo.com [98.139.180.149] with 32 bytes of data:
-Reply from 98.139.180.149: bytes=32 time=67ms TTL=45
-Reply from 98.139.180.149: bytes=32 time=68ms TTL=45
-Reply from 98.139.180.149: bytes=32 time=70ms TTL=45
-Reply from 98.139.180.149: bytes=32 time=69ms TTL=45
+Ao executar estes códigos a comunicação __aguardará a conclusão do processo filho__ para __retornar os dados__ de saída. Caso queiramos __estabelecer um tempo limite__ podemos utilizar o seguinte código:
+```py
+import subprocess
+from datetime import datetime
 
-Ping statistics for 98.139.180.149:
-    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
-Approximate round trip times in milli-seconds:
-    Minimum = 67ms, Maximum = 70ms, Average = 68ms
+args = ["ping", "www.yahoo.com"]
 
-None
+try:
+    # Inicia o processo
+    process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+    # Lê a saída do processo em tempo real
+    start_time = datetime.now()
+    while True:
+        # Verifica se o tempo limite de 30 segundos foi excedido
+        elapsed_time = datetime.now() - start_time
+        if elapsed_time.total_seconds() > 30:
+            print("O processo excedeu o tempo limite de 30 segundos.")
+            process.kill()  # Termina o processo se exceder o tempo limite
+            break
+
+        # Lê uma linha da saída do processo
+        line = process.stdout.readline()
+        if not line:
+            break  # Se não houver mais linhas para ler, sai do loop
+        print(line, end="")  # Imprime a linha lida
+
+    # Captura possíveis erros
+    stdout, stderr = process.communicate()
+    
+    # Verifica se houve erro
+    if stderr:
+        print("Erro:", stderr)
+
+except subprocess.TimeoutExpired:
+    print("O processo excedeu o tempo limite de 30 segundos.")
+    process.kill()  # Termina o processo se exceder o tempo limite
 ```
-A última linha que diz __None__ é o resultado de __stderr__, o que significa que __não houve erros__.

@@ -1862,3 +1862,120 @@ cursor.execute(sql)
 print(cursor.fetchall())
 ```
 Neste exemplo, temos 3 tipos de busca. O primeiro, selecionamos __diretamente__ a informação que queremos buscar. No segundo, o algoritmo executa uma __listagem__ de todos elementos presentes no banco (rowid), ordenando os resultados pelo nome do artista em ordem crescente utilizando o comando __ORDER BY__. E por fim, no terceiro fazemos __buscas por caractéres específicos__.
+
+
+### 19) Capítulo 19 - O módulo de subprocesso
+
+O módulo de __subprocesso__ dá ao desenvolvedor a capacidade de iniciar processos ou programas a partir do Python.
+
+- __A função de chamada__
+
+O módulo de subprocesso fornece uma função chamada __call__. Esta função permite chamar um outro programa, aguardar a conclusão do comando e retornar o código de retorno. Esta função aceita um ou mais argumentos. Vamos ver um exemplo inicial:
+```py
+>>> import subprocess
+>>> subprocess.call("notepad.exe")
+0
+```
+Se executarmos isso no Windows, o comando deve abrir o bloco de notas. Podemos notar que o IDLE espera o fechamento do aplicativo e então retorna um código __zero (0)__. Isso significa que foi __concluído com sucesso__.
+
+Normalmente, quando chamamos essa função, desejamos __atribuir o código de retorno a uma variável__ para poder verificar se foi o resultado esperado:
+```py
+import subprocess
+code = subprocess.call("notepad.exe")
+if code == 0:
+        print("Success!")
+    else:
+        print("Error!")
+```
+O método call também aceita argumentos a serem passados ao programa que estamos executando. Vamos ver a saída do código `>>> code = subprocess.call(["ping", "www.yahoo.com"])` para entendermos:
+```
+Pinging ds-any-fp3-real.wa1.b.yahoo.com [98.139.180.149] with 32 bytes of data:
+Reply from 98.139.180.149: bytes=32 time=66ms TTL=45
+Reply from 98.139.180.149: bytes=32 time=81ms TTL=45
+Reply from 98.139.180.149: bytes=32 time=81ms TTL=45
+Reply from 98.139.180.149: bytes=32 time=69ms TTL=45
+
+Ping statistics for 98.139.180.149:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 66ms, Maximum = 81ms, Average = 74ms
+```
+
+Podemos notar que neste exemplo passamos uma lista de argumentos, o primeiro é o __programa que queremos chamar__, e qualquer outra coisa nessa lista serão argumentos que queremos passar para esse programa. No caso deste exemplo, estamos executando um ping no site do Yahoo. Também podemos executar o programa usando o shell do sistema operacional.
+
+- __A classe Popen__
+
+A __classe Popen__ executa um "programa filho" em um novo processo. Ao contrário do método call, esta execução não espera que o processo chamado termine, a menos que usemos a instrução __wait__. Vejamos um exemplo:
+```py
+program = "notepad.exe"
+subprocess.Popen(program)
+```
+Saída do código:
+```
+<subprocess.Popen object at 0x01EE0430>
+```
+Aqui criamos uma __variável programa__ e atribuímos a ela o valor "notepad.exe", depois a passamos para Popen. Ao executar o programa, podemos ver que ele retorna imediatamente o objeto __subprocess.Popen__ e o aplicativo que foi chamado é executado. Agora vejamos usando a instrução wait:
+```py
+program = "notepad.exe"
+process = subprocess.Popen(program)
+code = process.wait()
+```
+Neste caso precisamos dizer ao processo para __esperar__, pois não conseguiremos obter o código de retorno. Depois de digitar essa linha, fechamos o Bloco de Notas e imprimimos o código. Ou podemos simplesmente colocar todo esse código em um arquivo Python e executá-lo.
+
+Agora vamos executar o Popen usando vários argumentos no terminal do __Linux__ com o seguinte código: `>>> subprocess.Popen(["ls", "-l"])`
+
+Se executarmos isso, podemos ver que será impresso uma mensagem do objeto Popen e, em seguida, uma __lista de permissões e do conteúdo__ de qualquer pasta na qual executamos.
+
+- __Aprendendo a se comunicar__
+
+Existem várias maneiras de se comunicar com o processo que chamamos. Vamos primeiramente nos concentrar em como usar o __método de comunicação__ do módulo de subprocesso:
+```py
+args = ["ping", "www.yahoo.com"]
+process = subprocess.Popen(args,
+                           stdout=subprocess.PIPE)
+
+data = process.communicate()
+print(data)
+```
+Neste exemplo de código, criamos uma __variável args__ para armazenar uma __lista de argumentos__. Em seguida, redirecionamos a saída padrão (stdout) para nosso subprocesso para que possamos nos comunicar com ele. O próprio método de comunicação nos permite __comunicar com o processo__ que acabamos de gerar. 
+
+Podemos notar que ao executar este código a comunicação aguardará a conclusão do processo e então retornará uma __tupla de dois elementos__ que contém o que estava em __stdout e stderr__. Aqui está o resultado:
+```
+('Pinging ds-any-fp3-real.wa1.b.yahoo.com [98.139.180.149] with 32 bytes of data:
+Reply from 98.139.180.149: bytes=32 time=139ms TTL=45
+Reply from 98.139.180.149: bytes=32 time=162ms TTL=45
+Reply from 98.139.180.149: bytes=32 time=164ms TTL=45
+Reply from 98.139.180.149: bytes=32 time=110ms TTL=45
+Ping statistics for 98.139.180.149:
+Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+Minimum = 110ms, Maximum = 164ms, Average = 143ms
+', None)
+```
+Podemos também imprimir o resultado em um formato mais legível com o seguinte programa:
+```py
+import subprocess
+
+args = ["ping", "www.yahoo.com"]
+process = subprocess.Popen(args, stdout=subprocess.PIPE)
+
+data = process.communicate()
+for line in data:
+    print(line)
+```
+Gerando a seguinte saída:
+```
+Pinging ds-any-fp3-real.wa1.b.yahoo.com [98.139.180.149] with 32 bytes of data:
+Reply from 98.139.180.149: bytes=32 time=67ms TTL=45
+Reply from 98.139.180.149: bytes=32 time=68ms TTL=45
+Reply from 98.139.180.149: bytes=32 time=70ms TTL=45
+Reply from 98.139.180.149: bytes=32 time=69ms TTL=45
+
+Ping statistics for 98.139.180.149:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 67ms, Maximum = 70ms, Average = 68ms
+
+None
+```
+A última linha que diz __None__ é o resultado de __stderr__, o que significa que __não houve erros__.

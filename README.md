@@ -1988,3 +1988,90 @@ except subprocess.TimeoutExpired:
     print("O processo excedeu o tempo limite de 30 segundos.")
     process.kill()  # Termina o processo se exceder o tempo limite
 ```
+
+### 20) Capítulo 20 - O Módulo sys
+
+O módulo sys fornece __parâmetros e funções__ específicas do sistema. Iremos ver algumas neste capítulo
+
+- __sys.argv__
+
+sys.argv é uma __lista de argumentos de linha de comando__ que foram __pasasados para o script__. O primeiro argumento é definido como __argv[0]__, e seu conteúdo é o __nome do próprio script__. Dependendo da plataforma em que estamos executando, o primeiro argumento pode conter o __caminho completo__ para o script, ou, apenas o __nome do arquivo__. Vamos ver alguns exemplos de como isso funciona.
+```py
+import sys
+sys.argv
+```
+Se executarmos isso, receberemos uma lista com uma __string vazia__. Então, vamos criar um arquivo chamado __"sysargv.py"__ com o seguinte conteúdo:
+```py
+# sysargv.py
+import sys
+
+print(sys.argv)
+```
+Agora, se executarmos o código, provavelmente veremos como saída uma __lista com um único elemento__ que contém o __caminho para o script__. 
+
+Se tentarmos passar alguns argumentos ao script, na saída teremos o __primeiro argumento__ como o __nome do script__. E os próximos dois argumentos da lista são aqueles que __passamos__ ao nosso script.
+
+- __sys.executable__
+
+O valor de sys.exec é o __caminho absoluto__ para o interpretador Python. Isso é bastante útil quando estamos usando a máquina de outra pessoa e precisamos saber onde Python está instalado.
+```py
+import sys
+sys.executable
+```
+
+- __sys.exit__
+
+A função sys.exit() permite ao desenvolvedor __saír do python__. A função exit recebe um __argumento opcional__, normalmente um número inteiro que fornece um __status de saída__. O __zero__, que é muito utilizado, é considerado uma __recisão bem-sucedida__.
+
+Quando chamamos a função exit, o programa gera a exceção __SystemExit__, que permite que funções de limpeza funcionem nas cláusulas __finally__ do bloco __try/except__. Vamos dar uma olhada nesta funcionalidade:
+```py
+import sys
+
+try:
+    sys.exit(0)
+
+except SystemExit:
+    print("Fui interrompido")
+    sys.exit(0)
+```
+
+- __sys.path__
+
+O valor de sys.path é uma __lista de strings__ que __especifíca o caminho de pesquisa dos módulos__. Basicamente, isso informa ao Python quais locais procurar quando ele tenta importar um módulo. A função sys.path é inicializada a partir de uma __variável de ambiente__ chamada __PYTHONPATH__, além de uma padrão dependente de instalação.
+
+Esta função pode ser muito útil para __depuraração__ por exemplo, caso algum módulo não consiga ser importado. Por ser uma lista, podemos __adicionar ou excluír__ caminhos nela, usando os seguintes comandos:
+
+`>>> sys.path.append("/path/to/my/module")` Para incluir
+
+`>>> sys.path.remove("/path/to/my/module")` Para excluir
+
+- __sys.platform__
+
+O valor de sys.plataform é um __identificador de plataforma__. Podemos usar isso para __anexar módulos específicos__ da plataforma para __sys.path__. Ou até mesmo __importar__ módulos diferentes dependendo da plataforma.
+```py
+import sys
+sys.platform
+```
+Saída do código:
+
+`'win32'`
+
+Isso nos diz que o Python está sendo executado em uma máquina Windows por exemplo. Agora vejamos um exemplo de como podemos usar essas informações:
+```py
+import sys
+
+os = sys.platform
+if os == "win32":
+        
+        print('Windows')
+        import winreg
+
+elif os == "linux": 
+        
+        import subprocess
+        subprocess.Popen(["w", "--help"])
+```
+
+- __sys.stdin / stdout / stderr__
+
+O stdin , stdout e stderr __mapeiam objetos de arquivo__ que correspondem aos fluxos de __entrada, saída e erro__ do interpretador, respectivamente. __stdin__ é usado para __todas as entradas__ fornecidas ao intérprete, exceto scripts, enquanto __stdout__ é usado para a __saída de instruções__ de __impressão e expressão__. Já __sys.stderr__ é usado principalmente para __imprimir mensagens de erro ou exceções__.

@@ -2075,3 +2075,173 @@ elif os == "linux":
 - __sys.stdin / stdout / stderr__
 
 O stdin , stdout e stderr __mapeiam objetos de arquivo__ que correspondem aos fluxos de __entrada, saída e erro__ do interpretador, respectivamente. __stdin__ é usado para __todas as entradas__ fornecidas ao intérprete, exceto scripts, enquanto __stdout__ é usado para a __saída de instruções__ de __impressão e expressão__. Já __sys.stderr__ é usado principalmente para __imprimir mensagens de erro ou exceções__.
+
+
+### 21) Capítulo 21 - O módulo de threading
+
+Python possuí diversas construções de simultaneidade diferentes, como __threading, filas e multiprocessamento__. O módulo de threading costumava ser a principal forma de obter essa simultaneidade.
+
+- __Usando threads__
+
+Vamos começar com um exemplo simples que apenas demonstra como funcionam as threads. Para isso, subclassificaremos a classe __Thread__ e faremos com que ela imprima seu nome em stdout:
+```py
+import random
+import time
+
+from threading import Thread
+
+class MyThread(Thread):
+    """
+    Um exemplo de threading 
+    """
+
+    def __init__(self, name):
+        """Inicializa a thread"""
+        Thread.__init__(self)
+        self.name = name
+
+    def run(self):
+        """Roda a thread"""
+        amount = random.randint(3, 15)
+        time.sleep(amount)
+        msg = "%s is running" % self.name
+        print(msg)
+
+def create_threads():
+    """
+    Cria um grupo de threads
+    """
+    for i in range(5):
+        name = "Thread #%s" % (i+1)
+        my_thread = MyThread(name)
+        my_thread.start()
+
+if __name__ == "__main__":
+    create_threads()
+```
+No código acima importamos o módulo __random__, o módulo __time__ e importamos a classe __Thread__ do módulo __threading__. Em seguida, subclassificamos Thread e substituímos seu método __ __init__ __ para aceitar um argumento que rotulamos como __main__. Para iniciar a thread chamamos o método __start()__, e após isso, será chamado automaticamente o método __run__ do thread. O comando __random.randint__ fará com que o Python escolha aleatoriamente um número de 3 a 15 que será o período de "sleeping". Em seguida, fazemos o thread dormir o número de segundos que foi determinado para simular que ele está fazendo algo. Por fim, imprimimos qual thread foi finalizada (a função criará 5 threads). A ordem da saída será diferente a cada vez.
+
+- __Escrevendo um downloader encadeado__
+
+Neste exemplo criaremos uma classe Thread que pode __baixar arquivos__ da internet. Usaremos alguns recursos gratuitos para isso. Vejamos o funcionamento no código a seguir:
+```py
+import os
+import urllib.request
+
+from threading import Thread
+
+class DownloadThread(Thread):
+    """
+    Um exemplo de threading que pode baixar um arquivo 
+    """
+
+    def __init__(self, url, name):
+        """Inicializa a thread"""
+        Thread.__init__(self)
+        self.name = name
+        self.url = url
+
+    def run(self):
+        """Roda a thread"""
+        handle = urllib.request.urlopen(self.url)
+        fname = os.path.basename(self.url)
+        with open(fname, "wb") as f_handler:
+            while True:
+                chunk = handle.read(1024)
+                if not chunk:
+                    break
+                f_handler.write(chunk)
+        msg = "%s has finished downloading %s!" % (self.name,
+                                                   self.url)
+        print(msg)
+
+def main(urls):
+    """
+    Roda o programa
+    """
+    for item, url in enumerate(urls):
+        name = "Thread %s" % (item+1)
+        thread = DownloadThread(url, name)
+        thread.start()
+
+if __name__ == "__main__":
+    urls = ["http://www.irs.gov/pub/irs-pdf/f1040.pdf",
+            "http://www.irs.gov/pub/irs-pdf/f1040a.pdf",
+            "http://www.irs.gov/pub/irs-pdf/f1040ez.pdf",
+            "http://www.irs.gov/pub/irs-pdf/f1040es.pdf",
+            "http://www.irs.gov/pub/irs-pdf/f1040sb.pdf"]
+    main(urls)
+```
+Esta é basicamente uma reescrita completa do primeiro script. Neste importamos os módulos __os e urllib__, bem como o módulo __threading__. Estaremos usando urllib para fazer o download real dentro da classe de thread. O módulo os é usado para extrair o __nome do arquivo que estamos baixando__ para que possamos usá-lo para criar um arquivo com o mesmo nome em nossa máquina. Na classe __DownloadThread__, configuramos o __ __init__ __ para __aceitar__ uma URL e um nome para o thread. No método run, abrimos a url, __extraímos o nome do arquivo__ e então usamos esse nome para __nomear/criar o arquivo no disco__. Em seguida, usamos um loop while para __baixar o arquivo__ um kilobyte por vez e gravá-lo no disco. Assim que o arquivo for salvo, imprimimos o nome do tópico e qual url o download foi concluído.
+
+- __Usando Filas__
+
+Sabemos que uma fila pode ser usada para casos __FIFO__ ou __LILO__. Mas nesta seção veremos um script simples de download de arquivos para demonstrar o funcionamento de __filas simultâneas__:
+```py
+import os
+import threading
+import urllib.request
+
+from queue import Queue
+
+class Downloader(threading.Thread):
+    """Baixador de Arquivos com Threads"""
+
+    def __init__(self, queue):
+        """Inicializa a thread"""
+        threading.Thread.__init__(self)
+        self.queue = queue
+
+    def run(self):
+        """Executa a thread"""
+        while True:
+            # obtém a URL da fila
+            url = self.queue.get()
+
+            # baixa o arquivo
+            self.download_file(url)
+
+            # envia um sinal para a fila indicando que o trabalho está concluído
+            self.queue.task_done()
+
+    def download_file(self, url):
+        """Baixa o arquivo"""
+        handle = urllib.request.urlopen(url)
+        fname = os.path.basename(url)
+        with open(fname, "wb") as f:
+            while True:
+                chunk = handle.read(1024)
+                if not chunk: break
+                f.write(chunk)
+
+def main(urls):
+    """
+    Executa o programa
+    """
+    queue = Queue()
+
+    # cria um pool de threads e atribui uma fila a elas
+    for i in range(5):
+        t = Downloader(queue)
+        t.setDaemon(True)
+        t.start()
+
+    # fornece dados à fila
+    for url in urls:
+        queue.put(url)
+
+    # aguarda a conclusão da fila
+    queue.join()
+
+if __name__ == "__main__":
+    urls = ["http://www.irs.gov/pub/irs-pdf/f1040.pdf",
+            "http://www.irs.gov/pub/irs-pdf/f1040a.pdf",
+            "http://www.irs.gov/pub/irs-pdf/f1040ez.pdf",
+            "http://www.irs.gov/pub/irs-pdf/f1040es.pdf",
+            "http://www.irs.gov/pub/irs-pdf/f1040sb.pdf"]
+    main(urls)
+```
+
+Primeiro de tudo, precisamos olhar a definição da função principal para ver como tudo isso flui. Aqui vemos que ela aceita uma __lista de URLs__, e depois cria uma instância de fila que passa para 5 threads daemonizadas (threads que ficam em __segundo plano__ no programa, não impedindo seu encerramento). Em seguida, carregamos a fila (usando o método __put__) com as URLs que passamos.
+
+E então, finalmente dizemos à fila para __esperar__ que as threads façam seu processamento através do método __join__ na classe download, temos a linha __self.queue.get()__ que bloqueia até que a fila tenha algo para __retornar__. Isso significa que os threads ficam parados __esperando os downloads__.

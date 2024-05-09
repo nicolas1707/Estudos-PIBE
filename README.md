@@ -2242,6 +2242,306 @@ if __name__ == "__main__":
     main(urls)
 ```
 
-Primeiro de tudo, precisamos olhar a definição da função principal para ver como tudo isso flui. Aqui vemos que ela aceita uma __lista de URLs__, e depois cria uma instância de fila que passa para 5 threads daemonizadas (threads que ficam em __segundo plano__ no programa, não impedindo seu encerramento). Em seguida, carregamos a fila (usando o método __put__) com as URLs que passamos.
+Primeiro de tudo, precisamos olhar a definição da função principal para ver como tudo isso flui. Aqui vemos que ela aceita uma __lista de URLs__, e depois cria uma instância de fila que passa para 5 threads daemonizadas (threads que ficam em __segundo plano__ no programa, não impedindo seu encerramento). Em seguida, carregamos a fila (usando o método __put__) com as URLs que passamos. 
 
 E então, finalmente dizemos à fila para __esperar__ que as threads façam seu processamento através do método __join__ na classe download, temos a linha __self.queue.get()__ que bloqueia até que a fila tenha algo para __retornar__. Isso significa que os threads ficam parados __esperando os downloads__.
+
+
+### 22) Capítulo 22 - Trabalhando com datas e horas
+
+Neste capítulo veremos os módulos de data e hora, aprendendo sobre classes do módulo __datetime__. Há também uma classe chamada __tzinfo__ para trabalhar com __fusos horários__.
+
+- __datetime.data__
+
+Python pode representar datas de várias formas, veremos agora o formato __datetime.date__, pois ele é um dos objetos de data e hora mais simples, que é como exemplo: `>>> datetime.date(2012, 12, 14)`.
+
+Este código mostra como criar um objeto de data simples. A classe aceita 3 argumentos __ano, mês e data__. Se passarmos um valor inválido veremos um __ValueError__.
+
+Podemos também __atribuir__ o objeto datetime.date a uma __váriavel__ podendo desta forma acessar suas __componentes__. Vejamos um exemplo:
+```py
+>>> import datetime
+>>> d = datetime.date(2012, 12, 14)
+>>> d.year
+2012
+>>> d.day
+14
+>>> d.month
+12
+```
+Outra função útil é identificar qual a __data de hoje__ usando o comando: `>>> datetime.date.today()`. Isso pode ser útil sempre que precisarmos registrar que dia é hoje.
+
+- __datetime.datetime__
+
+O objeto datetime.datetime contém __todas as informações__ de um objeto __datetime.date__. Vamos ver mais um exemplo usando este comando:
+```py
+>>> datetime.datetime(2014, 3, 5)
+datetime.datetime(2014, 3, 5, 0, 0)
+>>> datetime.datetime(2014, 3, 5, 12, 30, 10)
+datetime.datetime(2014, 3, 5, 12, 30, 10)
+>>> d = datetime.datetime(2014, 3, 5, 12, 30, 10)
+>>> d.year
+2014
+>>> d.second
+10
+>>> d.hour
+12
+```
+Aqui podemos ver que datetime.datetime aceita vários __argumentos adicionais__: ano, mês, dia, hora, minuto e segundo. Ele também permite que você especifique informações de __microssegundos e fuso horário__. 
+
+O módulo datetime possuí outro método que devemos conhecer, chamado __strftime__. Este método permite ao desenvolvedor criar uma string que representa a hora em um formato mais legível. Veremos agora alguns destes modelos:
+```py
+>>> datetime.datetime.today().strftime("%Y%m%d")
+'20140305'
+>>> today = datetime.datetime.today()
+>>> today.strftime("%m/%d/%Y")
+'03/05/2014'
+>>> today.strftime("%Y-%m-%d-%H.%M.%S")
+'2014-03-05-17.59.53'
+```
+
+- __datetime.timedelta__
+
+O objeto datetime.timedelta representa uma __duração de tempo__. Em outras palavras, representa a __diferença entre duas datas ou horas__. Vejamos um exemplo simples:
+```PY
+>>> now = datetime.datetime.now()
+>>> now
+datetime.datetime(2014, 3, 5, 18, 13, 51, 230000)
+>>> then = datetime.datetime(2014, 2, 26)
+>>> delta = now - then
+>>> type(delta)
+<type 'datetime.timedelta'>
+>>> delta.days
+7
+>>> delta.seconds
+65631
+```
+
+- __O módulo de tempo__
+
+O módulo time fornece ao desenvolvedor acesso a __várias funções__ relacionadas ao __tempo__. O módulo de tempo é baseado no que é conhecido como __epoch__, o ponto em que o tempo começa. Assim, podemos conhecer por exemplo a __época de nosso sistema__ usando o seguinte comando:
+```py
+>>> import time
+>>> time.gmtime(0)
+```
+Veremos agora outras funções relacionadas ao tempo.
+
+- __time.ctime__
+
+A função time.ctime converterá um __tempo dado__ em segundos desde a época em uma string representando a hora local:
+```py
+>>> import time
+>>> time.ctime()
+'Thu Mar 06 07:28:48 2014'
+>>> time.ctime(1384112639)
+'Sun Nov 10 13:43:59 2013'
+```
+
+- __time.sleep__
+
+A função time.sleep dá ao desenvolvedor a capacidade de __suspender a execução do script__ por um determinado número de segundos:
+```py
+import time
+
+sec = 2
+for x in range(5):
+    time.sleep(sec)
+    print("Slept for %d seconds" %sec)
+```
+
+- __time.strftime__
+
+O módulo time possuí uma função chamada strftime que funciona praticamente da mesma maneira que na versão datetime. A diferença está principalmente no que ele aceita como entrada: uma tupla ou um objeto __struct_time__, como aqueles que são retornados quando você chama __time.gmtime()__ ou __time.localtime()__.
+
+- __time.time__
+
+A função time.time retornará o __tempo em segundos__ desde a __época__ como um número de ponto flutuante com o comando a seguir: `>>> time.ctime(time.time())`.
+
+### 23) Capítulo 23 - O módulo XML
+
+Um dado XML (Extensible Markup Language) é uma __forma estruturada__ de representar __informações__ que é frequentemente usada para armazenar e __trocar dados__ de forma legível por __máquina e humanos__. Esta é uma linguagem de marcação que permite aos usuários __definir__ suas próprias __tags__ e __estruturas de dados__. Vejamos um exemplo simples de um dado XML:
+```
+<bookstore>
+  <book category="fiction">
+    <title lang="en">Harry Potter</title>
+    <author>J.K. Rowling</author>
+    <year>2005</year>
+    <price>29.99</price>
+  </book>
+  <book category="non-fiction">
+    <title lang="en">Python Programming</title>
+    <author>John Doe</author>
+    <year>2019</year>
+    <price>39.95</price>
+  </book>
+</bookstore>
+```
+
+Aqui estão algumas características de dados XML:
+
+- __Hierarquia__
+
+Os dados XML são organizados em uma __estrutura hierárquica__, semelhante a uma __árvore__, com __elementos aninhados__ __dentro de outros elementos__. Veremos agora um exemplo de estrutura hierárquica:
+```py
+import xml.etree.ElementTree as ET
+
+# Criar o elemento raiz
+root = ET.Element("bookstore")
+
+# Criar elementos filhos
+book1 = ET.SubElement(root, "book")
+book1.set("category", "fiction")
+
+title1 = ET.SubElement(book1, "title")
+title1.text = "Harry Potter"
+
+author1 = ET.SubElement(book1, "author")
+author1.text = "J.K. Rowling"
+
+year1 = ET.SubElement(book1, "year")
+year1.text = "2005"
+
+price1 = ET.SubElement(book1, "price")
+price1.text = "29.99"
+
+book2 = ET.SubElement(root, "book")
+book2.set("category", "non-fiction")
+
+title2 = ET.SubElement(book2, "title")
+title2.text = "Python Programming"
+
+author2 = ET.SubElement(book2, "author")
+author2.text = "John Doe"
+
+year2 = ET.SubElement(book2, "year")
+year2.text = "2019"
+
+price2 = ET.SubElement(book2, "price")
+price2.text = "39.95"
+
+# Criar o objeto de árvore
+tree = ET.ElementTree(root)
+
+# Salvar a árvore em um arquivo XML
+tree.write("bookstore.xml")
+```
+Este código cria uma estrutura hierárquica simples de uma livraria com dois livros. Ele usa o módulo __xml.etree.ElementTree__ para criar elementos XML (Element) e __adicioná-los como filhos__ uns dos outros. Em seguida, a __árvore__ é escrita em um arquivo XML chamado "bookstore.xml".
+
+- __Tags__
+
+Os elementos XML são delimitados por tags, que são __marcadores__ de início e fim. As tags podem ter atributos que fornecem informações adicionais sobre o elemento.
+```py
+import xml.etree.ElementTree as ET
+
+# Criar elementos XML com diferentes tags
+book = ET.Element("book")
+title = ET.SubElement(book, "title")
+author = ET.SubElement(book, "author")
+year = ET.SubElement(book, "year")
+price = ET.SubElement(book, "price")
+
+# Adicionar texto aos elementos
+title.text = "Harry Potter"
+author.text = "J.K. Rowling"
+year.text = "2005"
+price.text = "29.99"
+
+# Criar o objeto de árvore
+tree = ET.ElementTree(book)
+
+# Salvar a árvore em um arquivo XML
+tree.write("book.xml")
+```
+Saída do código:
+```
+<book>
+    <title>Harry Potter</title>
+    <author>J.K. Rowling</author>
+    <year>2005</year>
+    <price>29.99</price>
+</book>
+```
+
+- __Texto e conteúdo__
+
+Além das tags e atributos, os elementos XML podem conter __texto e/ou outros elementos aninhados__. Vejamos um exemplo:
+```py
+import xml.etree.ElementTree as ET
+
+# Criar o elemento raiz
+root = ET.Element("book")
+
+# Adicionar elementos com texto e conteúdo
+title = ET.SubElement(root, "title")
+title.text = "Harry Potter"
+
+author = ET.SubElement(root, "author")
+author.text = "J.K. Rowling"
+
+# Adicionar um elemento com conteúdo (outros elementos)
+chapters = ET.SubElement(root, "chapters")
+
+chapter1 = ET.SubElement(chapters, "chapter")
+chapter1.text = "The Boy Who Lived"
+
+chapter2 = ET.SubElement(chapters, "chapter")
+chapter2.text = "The Vanishing Glass"
+
+# Criar o objeto de árvore
+tree = ET.ElementTree(root)
+
+# Salvar a árvore em um arquivo XML
+tree.write("book.xml")
+```
+Neste exemplo, criamos um elemento XML < book > como __raiz__ e adicionamos __elementos__ como < title > e < author > com texto simples usando o atributo __text__. Em seguida, criamos um elemento < chapters > e adicionamos elementos < chapter > com texto usando a mesma abordagem.
+
+- __Extensibilidade__
+
+Uma das principais características do XML é sua extensibilidade. Os usuários podem __definir suas próprias tags e estruturas de dados__ de acordo com suas necessidades específicas. Aqui está um exemplo simples que demonstra como criar um documento XML com elementos definidos pelo usuário usando o módulo __xml.etree.ElementTree__ do Python:
+```py
+import xml.etree.ElementTree as ET
+
+# Criar o elemento raiz
+root = ET.Element("employees")
+
+# Adicionar elementos com diferentes tags e atributos
+employee1 = ET.SubElement(root, "employee")
+employee1.set("id", "1")
+
+name1 = ET.SubElement(employee1, "name")
+name1.text = "John Doe"
+
+position1 = ET.SubElement(employee1, "position")
+position1.text = "Software Engineer"
+
+employee2 = ET.SubElement(root, "employee")
+employee2.set("id", "2")
+
+name2 = ET.SubElement(employee2, "name")
+name2.text = "Jane Smith"
+
+position2 = ET.SubElement(employee2, "position")
+position2.text = "Project Manager"
+
+# Criar o objeto de árvore
+tree = ET.ElementTree(root)
+
+# Salvar a árvore em um arquivo XML
+tree.write("employees.xml")
+```
+Neste exemplo, criamos um documento XML com o elemento __raiz__ < employees > e dois elementos < employee > __dentro dele__. Cada elemento < employee > tem __dois elementos filhos__, < name > e < position >, representando o __nome e a posição__ do funcionário, respectivamente.
+
+Os elementos < employee > têm um atributo __id__ que pode ser usado para __identificar exclusivamente__ cada funcionário.
+
+Vejamos a saída do código:
+```
+<employees>
+    <employee id="1">
+        <name>John Doe</name>
+        <position>Software Engineer</position>
+    </employee>
+    <employee id="2">
+        <name>Jane Smith</name>
+        <position>Project Manager</position>
+    </employee>
+</employees>
+```

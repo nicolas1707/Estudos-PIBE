@@ -87,18 +87,27 @@ O comando mkdir é utilizado para __criar um ou mais diretórios de uma vez__ e 
 Na notação octal, podemos utilizar números para definir as permissões. Cada dígito na notação octal representa uma combinação de permissões para o proprietário, grupo e outros, respectivamente:
 
 4 - Permissão de leitura (r)
+
 2 - Permissão de escrita (w)
+
 1 - Permissão de execução (x)
 
 Esses números podem ser somados para combinar permissões. Por exemplo:
 
 7 (4+2+1) - Leitura, escrita e execução (rwx)
+
 6 (4+2) - Leitura e escrita (rw-)
+
 5 (4+1) - Leitura e execução (r-x)
+
 4 - Apenas leitura (r--)
+
 3 (2+1) - Escrita e execução (-wx)
+
 2 - Apenas escrita (-w-)
+
 1 - Apenas execução (--x)
+
 0 - Nenhuma permissão (---)
 
 - __mkdir -v diretório__ : Cria o diretório e confirma sua criação com uma mensagem.

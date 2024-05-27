@@ -120,7 +120,7 @@ Utilizado para excluír permanentemente um diretório vazio.
 
 - __rmdir -p dir/subidr__ : Excluí o subdiretório e sua pasta.
 
-### Comando rm
+## Comando rm
 
 O comando rm é utilizado para excluir arquivos em um diretório.
 

@@ -1,4 +1,4 @@
 *.env
 arquivo.py
-notebooks_env
+notebooks_env/
 __pycache__

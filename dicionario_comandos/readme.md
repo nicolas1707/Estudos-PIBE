@@ -112,6 +112,49 @@ Esses números podem ser somados para combinar permissões. Por exemplo:
 
 - __mkdir -v diretório__ : Cria o diretório e confirma sua criação com uma mensagem.
 
+## Comando rmdir
+
+Utilizado para excluír permanentemente um diretório vazio.
+
+### Comandos
+
+- __rmdir -p dir/subidr__ : Excluí o subdiretório e sua pasta.
+
+### Comando rm
+
+O comando rm é utilizado para excluir arquivos em um diretório.
+
+### Comandos
+
+- __rm arquivo__ : Excluí o arquivo indicado.
+- __rm arquivo1 arquivo2 arquivon___ : Excluí n arquivos indicados.
+
+__Opções que podemos adicionar:__
+- __-i__ solicita a confirmação do sistema antes de excluir um arquivo.
+- __-f__ permite que o sistema faça a remoção sem confirmação.
+- __-r__ exclui arquivos e diretórios recursivamente.
+
+## Comando touch
+
+O comando touch permite criar um arquivo vazio ou gerar e modificar um registro de data e hora.
+
+### Comandos
+
+- __touch  /home/username/Documents/arquivo__ : Cria um arquivo no caminho indicado.
+
+## Comando locate
+
+Usamos este comando para localizar um arquivo. Podemos também utilizar o argumento __-i__ para que não seja necessário diferenciar letras maiusculas e minusculas.
+
+## Comando find
+
+Similar ao locate, o comando find ajuda a procurar por arquivos, sendo que este comando usamos para procurar dentro de um __diretório específico__.
+
+### Comandos
+
+- __find -name arquivo__: Para localizar um arquivo no diretório atual.
+- __find ./ -type d -name diretorio__: Para procurar diretórios.
+
 
 
 

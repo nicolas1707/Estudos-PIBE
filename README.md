@@ -13,6 +13,7 @@ __Abordando os seguintes conteúdos:__
 - __Utilização de bibliotecas de terceiros__
 - __Compartilhando e empacotando códigos__
 
+## 
 
 ## Notebooks e ambientes virtuais
   

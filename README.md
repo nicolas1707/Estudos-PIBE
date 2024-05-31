@@ -14,7 +14,6 @@ __Abordando os seguintes conteúdos:__
 - __Compartilhando e empacotando códigos__
 
 ## 
-
 ## Notebooks e ambientes virtuais
   
 A partir de tutoriais e explicações sobre ambientes virtuais e suas aplicações, demos sequência aos estudos utilizando Python com estas novas funcionalidades. Utilizamos ambientes gerados no VSCode e notebooks gerados com o auxílio do Jupyter Lab para facilitar as tarefas e entender um pouco mais sobre computação interativa.

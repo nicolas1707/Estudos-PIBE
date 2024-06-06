@@ -1,0 +1,3 @@
+ 16:25:36 up 21 days,  3:15,  1 user,  load average: 0,90, 0,98, 1,00
+USUARIO  TTY      DE               LOGIN@   OCIOSO JCPU   PCPU O QUE
+nicolas. :1       :1               15:01   ?xdm?   3dias  0.01s /usr/lib/gdm3/gdm-x-session --run-script env GNOME_SHELL_SESSION_MODE=ubuntu /usr/bin/gnome-session --systemd --session=ubuntu

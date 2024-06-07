@@ -6,7 +6,7 @@ Trabalhar com pandas num jupyter notebook é a melhor maneira de conhecer seus d
 
 Nas referências abaixo, temos tutoriais em forma de repositório. A maioria deles tem as instruções de como clonar e criar o ambiente virtual para seguir o tutorial.
 
-## Referências
+## Referências 
 
 - [Pandas workshop](https://github.com/stefmolin/pandas-workshop)
 - [Pandas cookbook](https://github.com/jvns/pandas-cookbook)

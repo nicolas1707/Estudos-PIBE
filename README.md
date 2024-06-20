@@ -25,7 +25,7 @@ Através do uso de notebooks, foi realizado um estudo aprofundado sobre a biblio
 
 [Link para o diretório do estudo](https://github.com/nicolas1707/pandas-workshop)
 
-[Link para o notebook de anotações de autoria própria]([https://github.com/nicolas1707/pandas-workshop](https://github.com/nicolas1707/pandas-workshop/blob/main/notebooks/Anotações.ipynb))
+[Link para o notebook de anotações de autoria própria](https://github.com/nicolas1707/pandas-workshop/blob/main/notebooks/Anotações.ipynb)
 
 
 

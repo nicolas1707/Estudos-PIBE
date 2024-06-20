@@ -18,6 +18,15 @@ __Abordando os seguintes conteúdos:__
   
 A partir de tutoriais e explicações sobre ambientes virtuais e suas aplicações, demos sequência aos estudos utilizando Python com estas novas funcionalidades. Utilizamos ambientes gerados no VSCode e notebooks gerados com o auxílio do Jupyter Lab para facilitar as tarefas e entender um pouco mais sobre computação interativa.
 
+##
+## Pandas e DataFrame
+
+Através do uso de notebooks, foi realizado um estudo aprofundado sobre a biblioteca Pandas e a aplicação de dataframes. Durante este estudo, foram explorados diversos tutoriais que abordam desde a criação e manipulação de dataframes até técnicas de visualização de dados, proporcionando uma compreensão abrangente e prática dessas ferramentas essenciais para a análise de dados.
+
+__Link para o diretório do estudo__: https://github.com/nicolas1707/pandas-workshop
+__Link para o notebook de anotações de autoria própria__: https://github.com/nicolas1707/pandas-workshop/blob/main/notebooks/Anotações.ipynb
+
+
 
 
 

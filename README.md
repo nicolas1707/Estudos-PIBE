@@ -23,9 +23,13 @@ A partir de tutoriais e explicações sobre ambientes virtuais e suas aplicaçõ
 
 Através do uso de notebooks, foi realizado um estudo aprofundado sobre a biblioteca Pandas e a aplicação de dataframes. Durante este estudo, foram explorados diversos tutoriais que abordam desde a criação e manipulação de dataframes até técnicas de visualização de dados, proporcionando uma compreensão abrangente e prática dessas ferramentas essenciais para a análise de dados.
 
-[Link para o notebook de anotações de autoria própria](https://github.com/nicolas1707/pandas-workshop/blob/main/notebooks/Anotações.ipynb)
+[Link para o notebook de anotações realiadas por mim](https://github.com/nicolas1707/pandas-workshop/blob/main/notebooks/Anotações.ipynb)
 
 [Link para o diretório base do estudo](https://github.com/nicolas1707/pandas-workshop)
+
+[Link para o notebook de exercícios resolvidos por mim](https://github.com/nicolas1707/pandas_exercises/blob/master/Resoluções.ipynb)
+
+[Link para o diretório base de exercícios](https://github.com/nicolas1707/pandas_exercises)
 
 [Link para o diretório com material complementar](https://github.com/jvns/pandas-cookbook)
 

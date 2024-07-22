@@ -5,3 +5,5 @@ from dotenv import load_dotenv
 load_dotenv()  # chamamos a função para ela fazer o seu trabalho
  
 print(os.getenv("MINHA_VARIAVEL"))
+
+# Para executar o código usamos no terminal: python dotenv_tut.py

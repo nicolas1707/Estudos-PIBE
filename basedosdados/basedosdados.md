@@ -122,3 +122,142 @@ Preparamos tutoriais apresentando as principais funções de cada pacote para vo
 
 - __[Introdução ao pacote Python pt2](https://dev.to/basedosdados/base-dos-dados-python-102-50k0)__
 
+## API Python
+
+Esta API é composta por funções com 2 tipos de funcionalidade:
+
+1. __Módulos para requisição de dados:__ para somente consultar os dados e metadados do projeto.
+
+2. __Classes para gerenciamento de dados no Google Cloud:__ importante para subir dados em um projeto.
+
+### Módulos (requisição de dados)
+
+- `check_input(f)` 
+
+Verifica se o número de entradas é válido.
+
+- `get_columns(table_id=None, column_id=None, columns_name=None, page=1, page_size=10, backend=None)` 
+
+Obtem uma lista de colunas disponíveis, por table_id, column_id ou column_name.
+
+- `get_datasets(dataset_id=None, dataset_name=None, page=1, page_size=10, backend=None)` 
+
+Obtenha uma lista de conjuntos de dados disponíveis, por dataset_id ou dataset_name.
+
+- `get_tables(dataset_id=None, table_id=None, table_name=None, page=1, page_size=10, backend=None)` 
+
+Obtenha uma lista de tabelas disponíveis, por dataset_id, table_id ou table_name.
+
+- `inject_backend(f)` 
+
+Injeta instância de back-end se não existir.
+
+- `search(q=None, page=1, page_size=10, backend=None)` 
+
+Pesquisa conjuntos de dados, consultando todos os metadados disponíveis para o termo `q`.
+
+- `download(savepath, query=None, dataset_id=None, table_id=None, billing_project_id=None, query_project_id='basedosdados', limit=None, from_file=False, reauth=False, compression='GZIP')` 
+
+Baixa a tabela ou o resultado da consulta do BigQuery baseadodosdados (ou outro).
+
+- `read_sql(query, billing_project_id=None, from_file=False, reauth=False, use_bqstorage_api=False)` 
+
+Carrega dados do BigQuery usando uma consulta.
+
+- `read_table(dataset_id, table_id, billing_project_id=None, query_project_id='basedosdados', limit=None, from_file=False, reauth=False, use_bqstorage_api=False)` 
+
+Carrega dados do BigQuery usando dataset_id e table_id.
+
+### Classes (gerenciamento de dados)
+
+1. __`Storage (Base)`__
+
+Usado para gerenciar arquivos no Google Cloud Storage.
+
+- `copy_table(self, source_bucket_name='basedosdados', destination_bucket_name=None, mode='staging', new_table_id=None)`
+
+Copia a tabela de um bucket de origem para o seu bucket e envia solicitações em lotes.
+
+- `delete_file(self, filename, mode, partitions=None, not_found_ok=False)`
+
+Usado para deletar arquivos.
+
+- `delete_table(self, mode='staging', bucket_name=None, not_found_ok=False)`
+
+Exclui uma tabela do armazenamento, envia solicitações em lotes.
+
+- `download(self, filename='*', savepath='.', partitions=None, mode='staging', if_not_exists='raise')`
+
+Baixa arquivos do Google Storage no caminho __mode/dataset_id/table_id/partitions/filename__ e replica a hierarquia de pastas ao salvar.
+
+- `init(self, replace=False, very_sure=False)`
+
+Inicializa bucket e pastas.
+
+- `upload(self, path, mode='all', partitions=None, if_exists='raise', chunk_size=None, **upload_args)`
+
+Faz um upload para o armazenamento.
+
+2. __`Dataset (Base)`__
+
+Usado para gerenciar conjuntos de dados no BigQuery.
+
+- `dataset_config`
+
+Arquivo de configuração do conjunto de dados.
+
+- `create(self, mode='all', if_exists='raise', dataset_is_public=True, location=None)`
+
+Cria conjuntos de dados do BigQuery com base em dataset_id.
+
+- `delete(self, mode='all')`
+
+Exclui conjunto de dados no BigQuery. Usamos o modo `Toogle` para escolher qual conjunto de dados excluir.
+
+- `exists(self, mode='staging')`
+
+Check if dataset exists.
+
+- `publicize(self, mode='all', dataset_is_public=True)`
+
+Altera a configuração do IAM para tornar público o conjunto de dados do BigQuery.
+
+- `update(self, mode='all', location=None)`
+
+Atualiza a descrição do conjunto de dados. Use o modo Toogle para escolher qual conjunto de dados atualizar.
+
+3. __`Table (Base)`__
+
+Gerencia tabelas no Google Cloud Storage e no BigQuery.
+
+- `table_config` 
+
+Carrega as configuração da tabela.
+
+- `append(self, filepath, partitions=None, if_exists='replace', chunk_size=None, **upload_args)` 
+
+Acrescenta novos dados à tabela existente do BigQuery.
+
+Desde que os dados tenham o mesmo esquema. Ele anexa os dados do caminho do arquivo à tabela existente.
+
+- `create(self, path=None, source_format='csv', csv_delimiter=',', csv_skip_leading_rows=1, csv_allow_jagged_rows=False, if_table_exists='raise', if_storage_data_exists='raise', if_dataset_exists='pass', dataset_is_public=True, location=None, chunk_size=None, biglake_table=False, set_biglake_connection_permissions=True)` 
+
+Cria uma tabela do BigQuery no conjunto de dados de preparo.
+
+Se um caminho for fornecido, os dados serão salvos automaticamente no armazenamento e uma pasta de conjuntos de dados e um local do BigQuery serão criados, além de criar a tabela e seus arquivos de configuração.
+
+- `delete(self, mode='all')` 
+
+Exclui a tabela no BigQuery.
+
+- `publish(self, if_exists='raise', custon_publish_sql=None, custom_schema=None)` 
+
+Cria uma tabela do BigQuery no conjunto de dados de produção.
+
+- `table_exists(self, mode)` 
+
+Verifica se a tabela existe no BigQuery.
+
+- `update(self, mode='prod', custom_schema=None)` 
+
+Atualiza o "schema" e a descrição do BigQuery.

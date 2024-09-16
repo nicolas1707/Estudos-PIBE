@@ -6,7 +6,7 @@ from billing_id import Id_Faturamento
 # Lista de estados do Brasil
 estados = ['AC']
 
-# Intervalo de anos de 2008 até 2024
+# Intervalo de anos 
 anos = list(range(2020, 2025))
 
 # Tabela do censo escolar (verifique o dataset_id e table_id)

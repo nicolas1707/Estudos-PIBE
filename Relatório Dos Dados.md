@@ -13,13 +13,14 @@ Antes de executar uma consulta, o BigQuery permite que vejamos uma estimativa do
 
 
 __No console do BigQuery:__
-Abra a página de consulta SQL.
 
-Escreva a sua consulta.
+- Abra a página de consulta SQL.
 
-No canto direito, ao lado do botão "Run", clique no ícone de "Query Validator" (um pequeno link com uma linha dizendo "This query will process X GB").
+- Escreva a sua consulta.
 
-O BigQuery mostrará quantos gigabytes (GB) a consulta processará. Se esse número ultrapassar os 1 TB mensais gratuitos (ou o limite da sua conta), você será cobrado.
+- No canto direito, ao lado do botão "Run", clique no ícone de "Query Validator" (um pequeno link com uma linha dizendo "This query will process X GB").
+
+- O BigQuery mostrará quantos gigabytes (GB) a consulta processará. Se esse número ultrapassar os 1 TB mensais gratuitos (ou o limite da sua conta), você será cobrado.
 
 
 __Script de validação:__

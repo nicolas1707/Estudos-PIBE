@@ -59,8 +59,9 @@ No código Python, foi necessário especificar o `billing_project_id`, que é o 
 
 - **Exemplo no código**:
     ```python
-    df = bd.read_sql(query, billing_project_id='project_id_no_google_cloud')
+    df = bd.read_sql(query, billing_project_id='Id_Faturamento')
     ```
+    *__Id_Faturamento__ está salvo em um __arquivo oculto__
 
 ### 5. **Execução do Script Python**
 

@@ -5,6 +5,19 @@
 ## Objetivo
 O objetivo foi baixar e organizar os dados do Censo Escolar, disponíveis na plataforma [Base dos Dados](https://basedosdados.org/), utilizando a API do BigQuery, filtrando por estado e ano. Os dados foram baixados em formato CSV e organizados em pastas, separadas por estado e ano.
 
+## IMPORTANTE
+__Modo de Simulação (Query Validator)__
+Antes de executar uma consulta, o BigQuery permite que vejamos uma estimativa do tamanho de dados que será processado. Isso pode te ajudar a entender se a consulta ultrapassará o limite gratuito. 
+
+__No console do BigQuery:__
+Abra a página de consulta SQL.
+Escreva a sua consulta.
+No canto direito, ao lado do botão "Run", clique no ícone de "Query Validator" (um pequeno link com uma linha dizendo "This query will process X GB").
+O BigQuery mostrará quantos gigabytes (GB) a consulta processará. Se esse número ultrapassar os 1 TB mensais gratuitos (ou o limite da sua conta), você será cobrado.
+
+__Script de validaçlão:__
+
+
 ## Passos Realizados
 
 ### 1. **Criação de Ambiente Virtual no VS Code**

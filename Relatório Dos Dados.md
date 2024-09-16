@@ -15,7 +15,7 @@ Escreva a sua consulta.
 No canto direito, ao lado do botão "Run", clique no ícone de "Query Validator" (um pequeno link com uma linha dizendo "This query will process X GB").
 O BigQuery mostrará quantos gigabytes (GB) a consulta processará. Se esse número ultrapassar os 1 TB mensais gratuitos (ou o limite da sua conta), você será cobrado.
 
-__Script de validaçlão:__
+__Script de validação:__
 
 
 ## Passos Realizados

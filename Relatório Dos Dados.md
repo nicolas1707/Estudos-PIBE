@@ -28,6 +28,7 @@ __Script de validação:__
 - Instale a biblioteca `google-cloud-bigquery`
 - Execute o script:
 ```python
+import os
 from google.cloud import bigquery
 
 # Função para calcular o tamanho estimado da consulta

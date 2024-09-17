@@ -5,7 +5,80 @@
 ## Objetivo
 O objetivo foi baixar e organizar os dados do Censo Escolar, disponíveis na plataforma [Base dos Dados](https://basedosdados.org/), utilizando a API do BigQuery, filtrando por estado e ano. Os dados foram baixados em formato CSV e organizados em pastas, separadas por estado e ano.
 
-## Passos Realizados
+## IMPORTANTE
+__Modo de Simulação (Query Validator)__
+
+
+Antes de executar uma consulta, o BigQuery permite que vejamos uma estimativa do tamanho de dados que será processado. Isso pode te ajudar a entender se a consulta ultrapassará o limite gratuito. 
+
+
+__No console do BigQuery:__
+
+- Abra a página de consulta SQL.
+
+- Escreva a sua consulta.
+
+- No canto direito, ao lado do botão "Run", clique no ícone de "Query Validator" (um pequeno link com uma linha dizendo "This query will process X GB").
+
+- O BigQuery mostrará quantos gigabytes (GB) a consulta processará. Se esse número ultrapassar os 1 TB mensais gratuitos (ou o limite da sua conta), você será cobrado.
+
+
+__Script de validação:__
+
+- Instale a biblioteca `google-cloud-bigquery`
+- Execute o script:
+```python
+from google.cloud import bigquery
+
+# Função para calcular o tamanho estimado da consulta
+def calcular_tamanho_query(estado, ano, dataset_id, table_id, project_id):
+    # Inicializar o cliente do BigQuery
+    client = bigquery.Client(project=project_id)
+
+    # Definir a query para o estado e ano especificado
+    query = f"""
+    SELECT *
+    FROM `{dataset_id}.{table_id}`
+    WHERE sigla_uf = '{estado}' AND ano = {ano}
+    """
+
+    # Configurar a consulta para rodar como 'dry run' (simulação)
+    job_config = bigquery.QueryJobConfig(dry_run=True, use_query_cache=False)
+
+    # Executar a consulta em modo dry run
+    query_job = client.query(query, job_config=job_config)
+
+    # Retornar o tamanho em bytes
+    return query_job.total_bytes_processed
+
+# Definir os estados e anos de interesse
+estados = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 
+           'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']  # Adicione os estados desejados
+anos = list(range(2008, 2025))  # Adicione os anos desejados
+
+# Dataset e tabela
+dataset_id = 'basedosdados.br_inep_censo_escolar'
+table_id = 'escola'
+project_id = 'download-dos-dados-inep'
+
+# Calcular o total de dados processados
+total_bytes = 0
+
+for estado in estados:
+    for ano in anos:
+        bytes_processados = calcular_tamanho_query(estado, ano, dataset_id, table_id, project_id)
+        total_bytes += bytes_processados
+        # Converter para gigabytes
+        gigabytes_processados = bytes_processados / (1024 ** 3)
+        print(f'Estado: {estado}, Ano: {ano}, Dados processados: {gigabytes_processados:.2f} GB')
+
+# Total em GB
+total_gigabytes = total_bytes / (1024 ** 3)
+print(f'Total de dados a serem processados: {total_gigabytes:.2f} GB')
+````
+
+
+## Passos Para o Download
 
 ### 1. **Criação de Ambiente Virtual no VS Code**
 

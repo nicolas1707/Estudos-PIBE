@@ -121,7 +121,7 @@ O arquivo de credenciais foi configurado através da variável de ambiente `GOOG
 - **Comando no terminal**:
     - **Linux/macOS**:
         ```bash
-        export GOOGLE_APPLICATION_CREDENTIALS=/caminho/para/suas/credenciais.json
+        export GOOGLE_APPLICATION_CREDENTIALS=/caminho/para/credenciais.json
         ```
 
 A variável de ambiente informa à biblioteca onde encontrar o arquivo JSON para autenticação no Google Cloud.

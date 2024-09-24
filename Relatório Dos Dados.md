@@ -3,136 +3,36 @@
 # Relatório: Download e Organização de Dados do Censo Escolar Usando a Base dos Dados
 
 ## Objetivo
-O objetivo foi baixar e organizar os dados do Censo Escolar, disponíveis na plataforma [Base dos Dados](https://basedosdados.org/), utilizando a API do BigQuery, filtrando por estado e ano. Os dados foram baixados em formato CSV e organizados em pastas, separadas por estado e ano.
-
-## IMPORTANTE
-__Modo de Simulação (Query Validator)__
-
-
-Antes de executar uma consulta, o BigQuery permite que vejamos uma estimativa do tamanho de dados que será processado. Isso pode te ajudar a entender se a consulta ultrapassará o limite gratuito. 
-
-
-__No console do BigQuery:__
-
-- Abra a página de consulta SQL.
-
-- Escreva a sua consulta.
-
-- No canto direito, ao lado do botão "Run", clique no ícone de "Query Validator" (um pequeno link com uma linha dizendo "This query will process X GB").
-
-- O BigQuery mostrará quantos gigabytes (GB) a consulta processará. Se esse número ultrapassar os 1 TB mensais gratuitos (ou o limite da sua conta), você será cobrado.
-
+O objetivo foi baixar e organizar os dados do Censo Escolar, disponíveis na plataforma [Base dos Dados](https://basedosdados.org/), utilizando a API do BigQuery, filtrando por ano para os datasets grandes. Os dados foram baixados em formato CSV e organizados em pastas, separadas por ano.
 
 ## Passos Para o Download
 
-### 1. **Criação de Ambiente Virtual no VS Code**
+### 1. **Análise e estimativa do espaço necessário para download**
 
-Foi criado um ambiente virtual para isolar as dependências do projeto.
+Para isso, utilizamos uma __query de busca total__ para cada tabela, verificando tanto o __valor de processamento__ dado pela informação disponível no canto superior direito do console, quanto o __tamanho do arquivo__ baixando o arquivo CSV após a consulta.
 
-- **Comando no terminal**:
-    ```bash
-    python -m venv venv
-    ```
+```SQL
+SELECT *
+FROM `basedosdados.br_inep_censo_escolar.tabela`
+```
 
-- **Ativação do ambiente virtual**:
+![image](https://github.com/user-attachments/assets/b06d7ba3-54ae-4525-8e71-b2a6c1d3c853)
 
-    - **macOS/Linux**:
-        ```bash
-        source venv/bin/activate
-        ```
+Após isso, efetuamos o download da tabela caso ela não estoure o limite de tamanho.
 
-### 2. **Instalação das Bibliotecas Necessárias**
+### 2. **Download para tabelas muito grandes**
 
-As bibliotecas `basedosdados` e `pandas` foram instaladas para manipulação e download de dados.
+Como dito anteriormente, para efetuarmos o download do arquivo ele deve possuir __até no máximo 1 Giga__, e algumas tabelas possuíam milhões de dados para download. Então, algumas tabelas tivemos que particionar para atender este requisito, divindo-as em pastas identificadas __por ano__ com um conjunto de arquivos CSV de no máximo __450MB__.
 
-- **Comando no terminal**:
-    ```bash
-    pip install basedosdados pandas
-    ```
+Para fazer estas pesquisas e downloads particionados, utilizamos uma __query de busca limitada__:
 
-### 3. **Configuração Manual das Credenciais do Google Cloud**
+```SQL
+SELECT *
+FROM `basedosdados.br_inep_censo_escolar.tabela`
+WHERE ano = x
+LIMIT 1500000 OFFSET 0;
+```
+Com este tipo de busca, incrementamos o valor de _OFFSET_ até não termos mais dados, para assim, baixar todos os dados do ano sem que estejam num único arquivo muito grande.
 
-Como o comando `basedosdados configure` foi removido das versões recentes, fizemos a configuração manual das credenciais.
+### 3. **Envio dos arquivos para o LABMAC**
 
-#### 3.1. **Download do Arquivo de Credenciais**
-
-- O arquivo de credenciais JSON foi baixado do Google Cloud Console, em:
-    - `IAM & Admin` > `Service Accounts` > Gerar Chave.
-
-#### 3.2. **Definição da Variável de Ambiente**
-
-O arquivo de credenciais foi configurado através da variável de ambiente `GOOGLE_APPLICATION_CREDENTIALS`.
-
-- **Comando no terminal**:
-    - **Linux/macOS**:
-        ```bash
-        export GOOGLE_APPLICATION_CREDENTIALS=/caminho/para/credenciais.json
-        ```
-
-A variável de ambiente informa à biblioteca onde encontrar o arquivo JSON para autenticação no Google Cloud.
-
-### 4. **Especificação do Project ID**
-
-No código Python, foi necessário especificar o `billing_project_id`, que é o ID do projeto de cobrança no Google Cloud, utilizado para acessar os dados via BigQuery.
-
-- **Exemplo no código**:
-    ```python
-    df = bd.read_sql(query, billing_project_id='Id_Faturamento')
-    ```
-    *__Id_Faturamento__ está salvo em um __arquivo oculto__
-
-### 5. **Execução do Script Python**
-
-O script Python foi criado para baixar os dados filtrados por estado e ano, e salvá-los em pastas organizadas. Aqui está o código utilizado:
-
-```python
-import basedosdados as bd
-import pandas as pd
-import os
-from billing_id import Id_Faturamento
-
-# Lista de estados do Brasil
-estados = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 
-           'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']
-
-# Intervalo de anos de 2008 até 2024
-anos = list(range(2008, 2025))
-
-# Tabela do censo escolar (verifique o dataset_id e table_id)
-dataset_id = 'br_inep_censo_escolar'
-table_id = 'escola'
-
-# Diretório base onde os dados serão salvos
-base_dir = 'censo_escolar_dados'
-
-# Criar o diretório base se não existir
-if not os.path.exists(base_dir):
-    os.makedirs(base_dir)
-
-for estado in estados:
-    for ano in anos:
-        # Filtrar por estado e ano
-        query = f"""
-        SELECT *
-        FROM `basedosdados.{dataset_id}.{table_id}`
-        WHERE sigla_uf = '{estado}' AND ano = {ano}
-        """
-
-        # Fazer o download dos dados usando a API
-        try:
-            df = bd.read_sql(query, billing_project_id='Id_Faturamento')
-
-            # Definir o caminho da pasta e do arquivo CSV
-            pasta_estado_ano = os.path.join(base_dir, f'{estado}-{ano}')
-            if not os.path.exists(pasta_estado_ano):
-                os.makedirs(pasta_estado_ano)
-            
-            caminho_csv = os.path.join(pasta_estado_ano, f'{estado}_{ano}.csv')
-
-            # Salvar os dados em CSV
-            df.to_csv(caminho_csv, index=False)
-
-            print(f'Dados de {estado}-{ano} salvos em {caminho_csv}')
-
-        except Exception as e:
-            print(f'Erro ao processar {estado}-{ano}: {e}')

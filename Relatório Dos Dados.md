@@ -36,3 +36,11 @@ Com este tipo de busca, incrementamos o valor de _OFFSET_ até não termos mais 
 
 ### 3. **Envio dos arquivos para o LABMAC**
 
+Primeiramente, tive que instalar e ativar o WSL em minha máquina Windows, que utilizei para baixar e armazenar os dados. Para isso, utilizei o comando `wsl --install` no Windows PowerShell. Feita a instalação e ativação do terminal do Ubuntu, pude prosseguir para a instalação do `rsync` neste terminal, utilizando o comando `sudo apt install rsync`.
+
+Após isso, bastou iniciar o VSCode, abrir o terminal integrado e utilizar o comando `rsync -avz /mnt/d/CENSO_ESCOLAR/ nicolas.fs@labmac02.blumenau.ufsc.br:/home/nicolas.fs/Estudos-PIBE/Repositório-GIT` para transferir as pastas até este repositório, e esperar a conclusão.
+
+![image](https://github.com/user-attachments/assets/12551084-cf91-4531-a763-4bb76fc194ee)
+
+
+

@@ -12,7 +12,7 @@ ssh usuario@labmac01.blumenau.ufsc.br
 ```
 
 ### Preparação do Ambiente
-Para organizar os arquivos, foi criada uma pasta chamada "Backup" no diretório home do usuário. O comando utilizado foi:
+Para organizar os arquivos, foi criada uma pasta chamada "Backup" no diretório do meu usuário. O comando utilizado foi:
 ```
 mkdir Backup
 cd Backup

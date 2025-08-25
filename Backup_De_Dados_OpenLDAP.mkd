@@ -1,0 +1,32 @@
+# Relatório: Processo de Backup do OpenLDAP no Servidor LABMAC01
+
+## Objetivo
+Realizar o backup do diretório OpenLDAP configurado no servidor LABMAC01.
+
+## Etapas do Processo
+
+### Acesso ao Servidor
+O acesso foi realizado utilizando o comando:
+```
+ssh usuario@labmac01.blumenau.ufsc.br
+```
+
+### Preparação do Ambiente
+Para organizar os arquivos, foi criada uma pasta chamada "Backup" no diretório do meu usuário. O comando utilizado foi:
+```
+mkdir Backup
+cd Backup
+```
+
+### Execução do Backup
+O backup dos dados do OpenLDAP foi gerado utilizando o comando:
+```
+sudo slapcat -l arquivo.ldif
+```
+Este comando exportou os dados do servidor LDAP para o arquivo arquivo.ldif, localizado dentro da pasta "Backup".
+
+### Verificação do Backup
+Após a execução do comando, foi verificado se o arquivo foi criado corretamente verificando seu conteúdo:
+```
+less arquivo.ldif
+```
